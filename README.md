@@ -1,39 +1,94 @@
-# fba_lite_libretro
+[![Build Status](https://travis-ci.org/libretro/fbalpha.svg?branch=master)](https://travis-ci.org/libretro/fbalpha)
 
-#### 介绍
-{**以下是 Gitee 平台说明，您可以替换此简介**
-Gitee 是 OSCHINA 推出的基于 Git 的代码托管平台（同时支持 SVN）。专为开发者提供稳定、高效、安全的云端软件开发协作平台
-无论是个人、团队、或是企业，都能够用 Gitee 实现代码托管、项目管理、协作开发。企业项目请看 [https://gitee.com/enterprises](https://gitee.com/enterprises)}
+# FBAlpha-libretro
+https://www.fbalpha.com
 
-#### 软件架构
-软件架构说明
+This is a fork of the official repository of the FB Alpha Emulator.
 
+Use of this program and it's source code is subject to the license conditions provided in the [license.txt](src/license.txt) file in the src folder.
 
-#### 安装教程
+## Roms
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+Use clrmamepro (which runs fine on linux with wine and on mac with crossover) to build valid romsets with dats from the [dats](dats/) directory.
+Don't report issues if you didn't build a valid romset.
+Also, i don't provide a "parent-only" dat file, this is usually a bad idea to only use parent roms (some don't work, and some clones are interesting)
 
-#### 使用说明
+## Emulating consoles
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+You can emulate consoles (with specific romsets, dats are also in the [dats](dats/) directory) by prefixing the name of the roms with `XXX_` and removing the `zip|7z` extension, or using the `--subsystem XXX` argument in the command line, here is the list of available prefixes :
+* CBS ColecoVision : `cv`
+* MSX 1 : `msx`
+* Nec PC-Engine : `pce`
+* Nec SuperGrafX : `sgx`
+* Nec TurboGrafx-16 : `tg`
+* Sega GameGear : `gg`
+* Sega Master System : `sms`
+* Sega Megadrive : `md`
+* Sega SG-1000 : `sg1k`
+* ZX Spectrum : `spec`
 
-#### 参与贡献
+## Samples
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+Samples should be put under SYSTEM_DIRECTORY/fba/samples
 
+## hiscore.dat
 
-#### 特技
+Copy [hiscore.dat](metadata/hiscore.dat) to SYSTEM_DIRECTORY/fba/
 
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+## Mapping
+
+We don't have a convenient tool like the MAME OSD, instead we use the retroarch api to customize mappings, you can do that by going into `Quick menu > Controls`.
+For those who don't want to fully customize their mapping, there are 2 convenient presets you can apply by changing the "device type" for a player in this menu :
+* **Classic** : it will apply the original neogeo cd "square" mapping in neogeo games, and use L/R as 5th and 6th button for 6 buttons games like Street Fighter II.
+* **Modern** : it will apply the King of fighters mapping from Playstation 1 and above in neogeo fighting games, and it will use R1/R2 as 5th and 6th button for 6 buttons games like Street Fighter II (for the same reason as the neogeo games), this is really convenient for most arcade sticks.
+
+## Frequently asked questions
+
+### Where can i find the XXX roms ?
+We don't provide links for roms. Google is your friend.
+
+### Game XXX is not launching, why ?
+It is either not supported or you have a bad rom. Build a valid romset with clrmamepro as said above.
+There is also a few games marked as not working, try one of their clones.
+
+### Game XXX has graphical glitches, why ?
+Most likely the same as above, make sure you have the right romset.
+If the problem persist, write a report with a screenshot and the name of the platform you are using.
+
+### Game XXX runs slowly, why ?
+Your hardware is probably too slow to run the game with normal settings. Try the following :
+* Check if there is a speedhack dipswitch in the core options, set it to "yes".
+* Try setting a value for frameskip in core options.
+* Try disabling rewind, runahead, and anything related to the savestates system in retroarch.
+* Try lowering audio settings in the core options.
+* If it is not enough, upgrade or overclock your hardware.
+
+### Game XXX has choppy sound, why ?
+Most likely for the same reason as above.
+
+### Game XXX runs faster in MAME2003/MAME2010, why ?
+This is not MAME, we are using different code. 
+Overall, FB Alpha is slower than old MAME version but more accurate and less buggy.
+This libretro port also support various features which are usually buggy or absent in MAME cores (netplay, rewind, retroachievements, ...). It takes some resources.
+
+### Cheat code doesn't work, why ?
+There should be partial support through the new API relying on main ram exposition.
+
+### Neogeo CD doesn't work, why ?
+There are several things to know :
+* You need a copy of neocdz.zip and neogeo.zip in your libretro system directory
+* You need to add `--subsystem neocd` to the command line
+* Supported format are ccd/sub/img iso (trurip), and single file MODE1/2352 bin/cue (use utilities like "CDmage" to convert your iso if needed)
+
+You can convert your unsupported isos by following this tutorial :
+* Get [CDMage 1.02.1](https://www.videohelp.com/software/CDMage) (freeware & no ads)
+* File > Open > select your iso (NB : for multi-track, select the .cue file, not the .iso file)
+* File > Save As > write the name of your new file
+* Make sure you select MODE1/2352 in the second drop-down
+* Press OK, wait for the process to finish (a few seconds on my computer), and it’s done !
+
+### Killer instinct won't work, why ?
+There are several things to know :
+* It is only running at playable speed on x86_64 (other arch will basically need a cpu at 4Ghz because they lack a mips3 dynarec), and the core needs to be built like this to enable this dynarec : `make -j5 -f makefile.libretro USE_X64_DRC=1`
+* If your rom is at `[rom_dir]/kinst.zip`, you'll need the uncompressed disc image at `[rom_dir]/kinst/kinst.img`
+* To get the uncompressed disc image, you'll need to use the chdman tool from MAME on the chd from mame, the command looks like this : `chdman extracthd -i kinst.chd -o kinst.img`
