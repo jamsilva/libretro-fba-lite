@@ -246,4 +246,10 @@ extern UINT8 DebugCPU_SH2Initted;
 
 void DebugTrackerExit();
 
+#ifdef USE_CYCLONE
+#define SEK_CORE_C68K (0)
+#define SEK_CORE_M68K (1)
+extern int nSekCpuCore; // 0 - c68k, 1 - m68k
+#endif
+
 #endif
