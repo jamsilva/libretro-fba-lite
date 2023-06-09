@@ -102,13 +102,15 @@ static INT32 InputBindDIPsInit()
 
 	for (INT32 i = 0; BurnDrvGetDIPInfo(&bdi, i) == 0; i++)
 	{
+		// Set default value
 		if (bdi.nFlags == 0xFF)
 		{
 			nOffset = nInputBindDIPOffset + bdi.nInput;
 			if (nOffset < nInputBindListCount)
 			{
 				pib = InputBindList + nOffset;
-				pib->nDefVal = (pib->nVal & ~bdi.nMask) | (bdi.nSetting & bdi.nMask);
+				pib->nVal = pib->nDefVal = bdi.nSetting;
+				*(pib->bii.pVal) = pib->nVal;
 			}
 		}
 	}

@@ -154,10 +154,13 @@ static void CreateDipVariables()
             else
                 sprintf(pValue->szValue, "Setting %d", j + 1);
 
-            UINT8 nVal = (pib->nVal & ~bdi2.nMask) | (bdi2.nSetting & bdi2.nMask);
-            if (nVal == pib->nDefVal)
+            UINT8 nDefSetting = (pib->nDefVal & bdi2.nMask);
+            if (nDefSetting == bdi2.nSetting)
                 strncpy(pOption->szDefaultValue, pValue->szValue, sizeof(pOption->szDefaultValue));
         }
+
+        if (pOption->vecValues.size() == 0)
+            vecDipOptions.pop_back();
     }
 }
 
@@ -502,8 +505,8 @@ static bool ApplyDipVariables()
     for (INT32 i = 0; i < vecDipOptions.size(); i++)
     {
         pOption = &vecDipOptions[i];
-
         var.key = pOption->szKey;
+
         if (!environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var))
             continue;
 
@@ -515,16 +518,16 @@ static bool ApplyDipVariables()
             if (strcmp(var.value, pValue->szValue) == 0)
             {
                 INT32 nOffset = nInputBindDIPOffset + pbdi->nInput;
-                if (nOffset >= nInputBindListCount)
-                    continue;
-
-                struct InputBind *pib = InputBindList + nOffset;
-                struct BurnInputInfo *pbii = &(pib->bii);
-                UINT8 nOldVal = pib->nVal;
-                pib->nVal = (pib->nVal & ~pbdi->nMask) | (pbdi->nSetting & pbdi->nMask);
-                *(pbii->pVal) = pib->nVal;
-                if (pib->nVal != nOldVal)
-                    bDipChanged = true;
+                if (nOffset < nInputBindListCount)
+                {
+                    struct InputBind *pib = InputBindList + nOffset;
+                    struct BurnInputInfo *pbii = &(pib->bii);
+                    UINT8 nOldVal = pib->nVal;
+                    UINT8 nNewVal = (pib->nVal & ~pbdi->nMask) | (pbdi->nSetting & pbdi->nMask);
+                    *(pbii->pVal) = pib->nVal = nNewVal;
+                    if (nNewVal != nOldVal)
+                        bDipChanged = true;
+                }
                 break;
             }
         }
@@ -537,7 +540,7 @@ void BurnUpdateVariables()
 {
     CheckVariables();
 
-    // Just set befor BurnDrvInit
+    // Only set befor BurnDrvInit
     if (!nBurnDrvOkay)
     {
         nBurnSoundRate = nAudSampleRate;
@@ -546,6 +549,7 @@ void BurnUpdateVariables()
         nSekCpuCore = (bCycloneEnabled ? 0 : 1);
 #endif
     }
+    
     if ((BurnDrvGetFlags() & BDF_16BIT_ONLY) || !bColorDepth32Enabled || bBurnPgmGame)
         nBurnColorDepth = 16;
     else
