@@ -154,18 +154,11 @@ static INT32 InputBindAutoOne(struct InputBind *pib)
 		if (prid->port < 0 || prid->port >= nMaxPlayers)
 			prid->port = 0;
 
-		if (strncmp("coin", szInfoBase, 4) == 0)
+		if (strncmp("coin", szInfoBase, 4) == 0 || strncmp("select", szInfoBase, 6) == 0)
 		{
 			prid->device = RETRO_DEVICE_JOYPAD;
 			prid->index = 0;
 			prid->id = RETRO_DEVICE_ID_JOYPAD_SELECT;
-			return 0;
-		}
-		if (strncmp("select", szInfoBase, 6) == 0)
-		{
-			prid->device = RETRO_DEVICE_JOYPAD;
-			prid->index = 0;
-			prid->id = RETRO_DEVICE_ID_JOYPAD_L3;
 			return 0;
 		}
 		if (strncmp("start", szInfoBase, 5) == 0)
