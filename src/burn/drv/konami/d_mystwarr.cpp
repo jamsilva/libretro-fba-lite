@@ -2078,7 +2078,6 @@ static INT32 MystwarrInit()
 
 	if (BurnWCLThreadCreate(&pBurnDrvDrawThread, (void (*)())DrvDraw) != 0)
 		return 1;
-	bBurnThreadDraw = true;
 
 	return 0;
 }
@@ -2194,7 +2193,6 @@ static INT32 MetamrphInit()
 
 	if (BurnWCLThreadCreate(&pBurnDrvDrawThread, (void (*)())DrvDraw) != 0)
 		return 1;
-	bBurnThreadDraw = true;
 
 	return 0;
 }
@@ -2296,7 +2294,6 @@ static INT32 ViostormInit()
 
 	if (BurnWCLThreadCreate(&pBurnDrvDrawThread, (void (*)())DrvDraw) != 0)
 		return 1;
-	bBurnThreadDraw = true;
 
 	return 0;
 }
@@ -2403,7 +2400,6 @@ static INT32 MartchmpInit()
 
 	if (BurnWCLThreadCreate(&pBurnDrvDrawThread, (void (*)())DrvDraw) != 0)
 		return 1;
-	bBurnThreadDraw = true;
 
 	return 0;
 }
@@ -2578,7 +2574,6 @@ static INT32 GaiapolisInit()
 
 	if (BurnWCLThreadCreate(&pBurnDrvDrawThread, (void (*)())DrvDraw) != 0)
 		return 1;
-	bBurnThreadDraw = true;
 
 	return 0;
 }
@@ -2739,7 +2734,6 @@ static INT32 DadandrnInit()
 
 	if (BurnWCLThreadCreate(&pBurnDrvDrawThread, (void (*)())DrvDraw) != 0)
 		return 1;
-	bBurnThreadDraw = true;
 
 	return 0;
 }
@@ -2749,7 +2743,6 @@ static INT32 DrvExit()
 	if (pBurnDrvDrawThread)
 		BurnWCLThreadDestroy(pBurnDrvDrawThread);
 	pBurnDrvDrawThread = NULL;
-	bBurnThreadDraw = false;
 
 	GenericTilesExit();
 
@@ -2888,7 +2881,7 @@ static void DrvUpdateDraw()
 	nBurnDrawBuffersPos = (nBurnDrawBuffersPos + 1) % BURN_MAX_VID_BUFFER;
 	pBurnDraw = pBurnDrawBuffers[nBurnDrawBuffersPos];
 
-	konamigx_copy_baks();
+	// Copy some buffer
 
 	pBurnDrvDrawThread->bWait = false;
 	BurnCondSignal(pBurnDrvDrawThread->Cond);

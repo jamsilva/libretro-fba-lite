@@ -1994,7 +1994,6 @@ static INT32 DrvInit(INT32 (*pRomLoadCallback)(), const UINT8 *sound_decrypt_tab
 
 	if (BurnWCLThreadCreate(&pBurnDrvDrawThread, (void (*)())DrvDraw) != 0)
 		return 1;
-	bBurnThreadDraw = true;
 
 	return 0;
 }
@@ -2004,7 +2003,6 @@ static INT32 DrvExit()
 	if (pBurnDrvDrawThread)
 		BurnWCLThreadDestroy(pBurnDrvDrawThread);
 	pBurnDrvDrawThread = NULL;
-	bBurnThreadDraw = false;
 
 	GenericTilesExit();
 

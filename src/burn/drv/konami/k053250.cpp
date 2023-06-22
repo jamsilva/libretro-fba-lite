@@ -11,24 +11,15 @@ static UINT8 *k053250Rom;
 static UINT8 *k053250RomExp;
 
 UINT16 *K053250Ram;
-static UINT8 k053250_regs[8];
-static UINT8 k053250_regs_bak[8];
+static UINT8 regs[8];
 static INT32 page = 0;
 
-static UINT16 *k053250_ram_buf[2];
-static UINT16 *k053250_ram_buf_bak;
+static UINT16 *buffer[2];
 static INT32 frame = -1;
 
 #define ORIENTATION_FLIP_X              0x0001  /* mirror everything in the X direction */
 #define ORIENTATION_FLIP_Y              0x0002  /* mirror everything in the Y direction */
 #define ORIENTATION_SWAP_XY             0x0004  /* mirror along the top-left/bottom-right diagonal */
-
-void K05325CopyBak()
-{
-	memcpy(k053250_regs_bak, k053250_regs, 8);
-	k053250_ram_buf_bak = k053250_ram_buf[page];
-	//memcpy(k053250_ram_buf_bak, k053250_ram_buf[page], 0x1000);
-}
 
 void K053250SetOffsets(INT32 , int offx, int offy)
 {
@@ -51,9 +42,8 @@ void K053250Init(INT32 , UINT8 *rom, UINT8 *romexp, INT32 size)
 	KonamiAllocateBitmaps();
 
 	K053250Ram = (UINT16*)BurnMalloc(0x6000);
-	k053250_ram_buf[0] = K053250Ram + 0x2000;
-	k053250_ram_buf[1] = K053250Ram + 0x2800;
-	//k053250_ram_buf_bak = (UINT16*)BurnMalloc(0x1000);
+	buffer[0] = K053250Ram + 0x2000;
+	buffer[1] = K053250Ram + 0x2800;
 
 	k053250Rom = rom;
 	k053250RomExp = romexp;
@@ -67,13 +57,12 @@ void K053250Reset()
 {
 	page = 0;
 	frame = -1;
-	memset (k053250_regs, 0, 8);
+	memset (regs, 0, 8);
 }
 
 void K053250Exit()
 {
 	BurnFree (K053250Ram);
-	//BurnFree (k053250_ram_buf_bak);
 }
 
 void K053250Scan(INT32 nAction)
@@ -89,7 +78,7 @@ void K053250Scan(INT32 nAction)
 	}
 
 	if (nAction & ACB_DRIVER_DATA) {
-		ba.Data	  = k053250_regs;
+		ba.Data	  = regs;
 		ba.nLen	  = 8;
 		ba.szName = "K053250 Regs";
 		BurnAcb(&ba);
@@ -270,10 +259,10 @@ void K053250Draw(INT32 , int colorbase, int /*flags*/, int priority)
 	int color, offset, zoom, scroll, passes, i;
 	bool wrap500 = false;
 
-	UINT16 *line_ram = k053250_ram_buf_bak;                // pointer to physical line RAM
-	int map_scrollx = short(k053250_regs_bak[0] << 8 | k053250_regs_bak[1]) - global_offx; // signed horizontal scroll value
-	int map_scrolly = short(k053250_regs_bak[2] << 8 | k053250_regs_bak[3]) - global_offy; // signed vertical scroll value
-	UINT8 ctrl = k053250_regs_bak[4];                                   // register four is the main control register
+	UINT16 *line_ram = buffer[page];                // pointer to physical line RAM
+	int map_scrollx = short(regs[0] << 8 | regs[1]) - global_offx; // signed horizontal scroll value
+	int map_scrolly = short(regs[2] << 8 | regs[3]) - global_offy; // signed vertical scroll value
+	UINT8 ctrl = regs[4];                                   // register four is the main control register
 
 	// copy visible boundary values to more accessible locations
 	int dst_minx  = 0; //cliprect.min_x;
@@ -470,13 +459,13 @@ static void k053250_dma(INT32 , int limiter)
 		return; // make sure we only do DMA transfer once per frame
 
 	frame = current_frame;
-	memcpy(k053250_ram_buf[page], K053250Ram, 0x1000);
+	memcpy(buffer[page], K053250Ram, 0x1000);
 	page ^= 1;
 }
 
 UINT16 K053250RegRead(INT32 , INT32 offset)
 {
-	return k053250_regs[(offset/2)&7];
+	return regs[(offset/2)&7];
 }
 
 void K053250RegWrite(INT32 , INT32 offset, UINT8 data)
@@ -486,10 +475,10 @@ void K053250RegWrite(INT32 , INT32 offset, UINT8 data)
 		offset = (offset / 2) & 7;
 
 		// start LVC DMA transfer at the falling edge of control register's bit1
-		if (offset == 4 && !(data & 2) && (k053250_regs[4] & 2))
+		if (offset == 4 && !(data & 2) && (regs[4] & 2))
 			k053250_dma(0,1);
 
-		k053250_regs[offset] = data;
+		regs[offset] = data;
 	}
 }
 
@@ -497,5 +486,5 @@ UINT16 K053250RomRead(INT32 , INT32 offset)
 {
 	offset = (offset/2)&0xfff;
 
-	return k053250Rom[0x80000 * k053250_regs[6] + 0x800 * k053250_regs[7] + offset/2];
+	return k053250Rom[0x80000 * regs[6] + 0x800 * regs[7] + offset/2];
 }

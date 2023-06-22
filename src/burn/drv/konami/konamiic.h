@@ -167,7 +167,6 @@ if (a >= nStartAddress && a <= nStartAddress + 0x7fff) {			\
 
 #define K056832_SET_ALPHA(x)			(K056832_LAYER_ALPHA | ((x)<<8))
 
-void K056832CopyBak();
 void K056832Reset();
 void K056832Init(UINT8 *rom, UINT8 *romexp, INT32 rom_size, void (*cb)(INT32 layer, INT32 *code, INT32 *color, INT32 *flags));
 void K056832Exit();
@@ -267,7 +266,6 @@ void K053251Scan(INT32 nAction);
 
 // K053247.cpp
 //---------------------------------------------------------------------------------------------------------------
-void K053247CopyBak();
 void K053247Reset();
 void K053247Init(UINT8 *gfxrom, UINT8 *gfxromexp, INT32 gfxlen, void (*Callback)(INT32 *code, INT32 *color, INT32 *priority), INT32 flags);
 void K053247Exit();
@@ -351,7 +349,6 @@ void K053936GPExit();
 
 extern UINT16 *K053250Ram; // allocated in k053250Init
 
-void K05325CopyBak();
 void K053250Init(INT32 chip, UINT8 *rom, UINT8 *romexp, INT32 size);
 void K053250SetOffsets(INT32 chip, int offx, int offy);
 void K053250Reset();
@@ -382,7 +379,6 @@ UINT16 K053250RomRead(INT32 chip, INT32 offset);
 #define K338_CTL_WAILSL     0x10
 #define K338_CTL_CLIPSL     0x20
 
-void K054338CopyBak();
 void K054338Init();
 void K054338Reset();
 void K054338Exit();
@@ -473,7 +469,6 @@ extern INT32 m_shd_rgb[12];
 #define K055555_FULLSHADOW  0x80000000
 
 extern INT32 K055555_enabled;
-void K055555CopyBak();
 void K055555WriteReg(UINT8 regnum, UINT8 regdat);
 void K055555LongWrite(INT32 offset, UINT32 data); // not implimented
 void K055555WordWrite(INT32 offset, UINT16 data);
@@ -501,7 +496,6 @@ void K055555Scan(INT32 nAction);
 #define GXSUB_5BPP      0x05    //  32 colors
 #define GXSUB_8BPP      0x08    // 256 colors
 
-void konamigx_copy_baks();
 void konamigx_mixer_init(int objdma);
 void konamigx_mixer_exit();
 void konamigx_mixer_primode(int mode);

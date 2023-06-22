@@ -777,7 +777,7 @@ static INT32 shadfrceFrame()
 			draw_line(scanline);
 		}
 
-		if (pBurnSoundOut) {
+		if (bBurnSound) {
 			INT32 nSegmentLength = (nBurnSoundLen / nInterleave) - nSoundBufferPos;
 			INT16* pSoundBuf = pBurnSoundOut + (nSoundBufferPos * 2);
 			BurnYM2151Render(pSoundBuf, nSegmentLength);
@@ -786,7 +786,7 @@ static INT32 shadfrceFrame()
 		}
 	}
 
-	if (pBurnSoundOut) {
+	if (bBurnSound) {
 		INT32 nSegmentLength = nBurnSoundLen - nSoundBufferPos;
 		INT16* pSoundBuf = pBurnSoundOut + (nSoundBufferPos << 1);
 		BurnYM2151Render(pSoundBuf, nSegmentLength);
@@ -797,7 +797,7 @@ static INT32 shadfrceFrame()
 	ZetClose();
 	SekClose();
 
-	if (pBurnDraw) {
+	if (bBurnDraw) {
 		shadfrceDraw();
 	}
 

@@ -6,18 +6,12 @@
 #include "burnint.h"
 #include "konamiic.h"
 
-static UINT8 k055555_regs[128];
-static UINT8 k055555_regs_bak[128];
+static UINT8 m_regs[128];
 INT32 K055555_enabled = 0;
-
-void K055555CopyBak()
-{
-	memcpy(k055555_regs_bak, k055555_regs, 128);
-}
 
 void K055555WriteReg(UINT8 regnum, UINT8 regdat)
 {
-	k055555_regs[regnum & 0x7f] = regdat;
+	m_regs[regnum & 0x7f] = regdat;
 }
 
 #if 0
@@ -58,17 +52,17 @@ void K055555ByteWrite(INT32 offset, UINT8 data)
 
 INT32 K055555ReadRegister(INT32 regnum)
 {
-	return k055555_regs_bak[regnum & 0x7f];
+	return m_regs[regnum & 0x7f];
 }
 
 INT32 K055555GetPaletteIndex(INT32 idx)
 {
-	return k055555_regs_bak[(K55_PALBASE_A + idx) & 0x7f];
+	return m_regs[(K55_PALBASE_A + idx) & 0x7f];
 }
 
 void K055555Reset()
 {
-	memset(k055555_regs, 0, 128 * sizeof(UINT8));
+	memset(m_regs, 0, 128 * sizeof(UINT8));
 }
 
 void K055555Init()
@@ -88,7 +82,7 @@ void K055555Scan(INT32 nAction)
 	
 	if (nAction & ACB_DRIVER_DATA) {
 		memset(&ba, 0, sizeof(ba));
-		ba.Data	  = k055555_regs;
+		ba.Data	  = m_regs;
 		ba.nLen	  = 128;
 		ba.szName = "K055555 Regs";
 		BurnAcb(&ba);

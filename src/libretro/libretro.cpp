@@ -240,7 +240,6 @@ static bool retro_load_game_common(const char *szRomPath)
 	retro_unload_game();
 
 	nBurnDrvActive = ~0U;
-	bBurnThreadDraw = false;
 	nCurrentFrame = 0;
 
 	BurnMakeAppPaths(szRomPath);

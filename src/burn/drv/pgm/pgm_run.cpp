@@ -875,7 +875,6 @@ INT32 pgmInit()
 
 	if (BurnWCLThreadCreate(&pBurnDrvDrawThread, (void (*)())pgmDraw) != 0)
 		return 1;
-	bBurnThreadDraw = true;
 
 	return 0;
 }
@@ -885,7 +884,6 @@ INT32 pgmExit()
 	if (pBurnDrvDrawThread)
 		BurnWCLThreadDestroy(pBurnDrvDrawThread);
 	pBurnDrvDrawThread = NULL;
-	bBurnThreadDraw = false;
 
 	pgmExitDraw();
 

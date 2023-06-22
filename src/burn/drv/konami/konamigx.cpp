@@ -39,21 +39,6 @@ static INT32 vmixon;
 static INT32 osinmix;
 static INT32 osmixon;
 
-static void copy_gx_spriteram_bak()
-{
-
-}
-
-void konamigx_copy_baks()
-{
-	K055555CopyBak(); // x 完全黑屏
-	K053247CopyBak(); // x 人物消失
-	K054338CopyBak(); // x 完全黑屏
-	K056832CopyBak(); // x 无背景
-	K05325CopyBak();  // x 无发现影响
-	copy_gx_spriteram_bak();
-}
-
 void konamigx_precache_registers()
 {
 	// (see sprite color coding scheme on p.46 & 47)
@@ -112,6 +97,8 @@ void konamigx_mixer_init(INT32 objdma)
 		gx_spriteram = (UINT16*)BurnMalloc(0x1000); 
 		m_gx_objdma = 1;
 	}
+	else
+		gx_spriteram = (UINT16*)K053247Ram;
 
 //	m_palette->set_shadow_dRGB32(3,-80,-80,-80, 0); // in k054338 -dink
 	K054338_invert_alpha(1);

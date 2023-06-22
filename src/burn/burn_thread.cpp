@@ -1,7 +1,5 @@
 #include "burnint.h"
 
-bool bBurnThreadDraw = false;
-
 bool bBurnDraw = true;
 UINT8 *pBurnDrawBuffers[2];
 INT32 nBurnDrawBuffersPos = 0;

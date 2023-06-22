@@ -1263,7 +1263,6 @@ INT32 cps3Init()
 	
 	if (BurnWCLThreadCreate(&pBurnDrvDrawThread, (void (*)())DrvCps3Draw) != 0)
 		return 1;
-	bBurnThreadDraw = true;
 
 	return 0;
 }
@@ -1273,7 +1272,6 @@ INT32 cps3Exit()
 	if (pBurnDrvDrawThread)
 		BurnWCLThreadDestroy(pBurnDrvDrawThread);
 	pBurnDrvDrawThread = NULL;
-	bBurnThreadDraw = false;
 
 	Sh2Exit();
 	

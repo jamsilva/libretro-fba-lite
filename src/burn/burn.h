@@ -330,8 +330,6 @@ struct BurnWCLThread
 #define BURN_MAX_AUD_BUFFER 2
 #define BURN_MAX_VID_BUFFER 2
 
-extern bool bBurnThreadDraw;
-
 extern bool bBurnSound;
 extern INT16 *pBurnSoundBuffers[BURN_MAX_AUD_BUFFER];
 extern INT32 nBurnSoundBuffersPos;

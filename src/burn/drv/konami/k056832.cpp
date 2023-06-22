@@ -7,7 +7,6 @@
 #define K056832_FLIPX	0x00001
 
 static UINT16 k056832Regs[0x20];
-static UINT16 k056832RegsBak[0x20];
 static UINT16 k056832Regsb[0x20];
 static UINT16 *K056832VideoRAM;
 
@@ -44,11 +43,6 @@ static INT32 K056832_metamorphic_textfix = 0;
 #define CLIP_MAXY	global_clip[3]
 
 static void (*m_callback)(INT32 layer, INT32 *code, INT32 *color, INT32 *flags);
-
-void K056832CopyBak()
-{
-	memcpy(k056832RegsBak, k056832Regs, 0x20 * 2);
-}
 
 void K056832Reset()
 {
@@ -171,7 +165,7 @@ void K056832ReadAvac(INT32 *mode, INT32 *data)
 
 UINT16 K056832ReadRegister(INT32 reg)
 {
-	return k056832RegsBak[reg & 0x1f];
+	return k056832Regs[reg & 0x1f];
 }
 
 INT32 K056832GetLookup( INT32 bits )
@@ -527,8 +521,8 @@ static void draw_layer_internal(INT32 layer, INT32 pageIndex, INT32 *clip, INT32
 		else
 			layer = m_active_layer;
 
-		INT32 fbits = (k056832RegsBak[3] >> 6) & 3;
-		INT32 flip  = (k056832RegsBak[1] >> (layer << 1)) & 0x3; // tile-flip override (see p.20 3.2.2 "REG2")
+		INT32 fbits = (k056832Regs[3] >> 6) & 3;
+		INT32 flip  = (k056832Regs[1] >> (layer << 1)) & 0x3; // tile-flip override (see p.20 3.2.2 "REG2")
 		smptr = &k056832_shiftmasks[fbits];
 
 		flip &= (attr >> smptr->flips) & 3;
@@ -618,7 +612,7 @@ static void draw_layer_internal(INT32 layer, INT32 pageIndex, INT32 *clip, INT32
 void K056832Draw(INT32 layer, UINT32 flags, UINT32 priority)
 {
 	UINT16 *m_videoram = K056832VideoRAM;
-	UINT16 *m_regs = k056832RegsBak;
+	UINT16 *m_regs = k056832Regs;
 
 	UINT32 last_dx, last_visible, last_active;
 	INT32 sx, sy, ay, tx, ty, width, height;

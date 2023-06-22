@@ -91,7 +91,7 @@ void BurnAVPlayInit()
     AudBufferInit();
     VidBufferInit();
 
-    if (bBurnThreadDraw)
+    if (pBurnDrvDrawThread)
     {
         BurnWCLThreadCreate(&pBurnAudPlayThread, AudPlayFrame);
         BurnWCLThreadCreate(&pBurnVidPlayThread, VidPlayFrame);

@@ -12,8 +12,8 @@ UINT32 KonamiIC_K055555InUse = 0;
 UINT32 KonamiIC_K054338InUse = 0;
 UINT32 KonamiIC_K056832InUse = 0;
 
-UINT8  *konami_priority_bitmap = NULL;
 UINT32 *konami_bitmap32 = NULL;
+UINT8  *konami_priority_bitmap = NULL;
 UINT32 *konami_palette32;
 
 static INT32 previous_depth = 0;

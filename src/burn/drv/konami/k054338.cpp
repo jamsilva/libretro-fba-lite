@@ -7,16 +7,10 @@
 #include "konamiic.h"
 
 static UINT16 k54338_regs[32];
-static UINT16 k54338_regs_bak[32];
 INT32 m_shd_rgb[12];
 
 static INT32 k054338_alphainverted;
 static INT32 alpha_cache; // for moomesa
-
-void K054338CopyBak()
-{
-	memcpy(k54338_regs_bak, k54338_regs, 64);
-}
 
 static void reset_shadows()
 {
@@ -79,7 +73,7 @@ void K054338WriteByte(INT32 offset, UINT8 data)
 // returns a 16-bit '338 register
 INT32 K054338_read_register(INT32 reg)
 {
-	return k54338_regs_bak[reg];
+	return k54338_regs[reg];
 }
 
 void K054338_update_all_shadows(INT32 rushingheroes_hack)
@@ -88,7 +82,7 @@ void K054338_update_all_shadows(INT32 rushingheroes_hack)
 
 	for (i = 0; i < 9; i++)
 	{
-		d = k54338_regs_bak[K338_REG_SHAD1R + i] & 0x1ff;
+		d = k54338_regs[K338_REG_SHAD1R + i] & 0x1ff;
 		if (d >= 0x100)
 			d -= 0x200;
 		m_shd_rgb[i] = d;
@@ -147,7 +141,7 @@ void K054338_fill_backcolor(INT32 palette_offset, INT32 mode) // (see p.67)
 	if (!mode)
 	{
 		// single color output from CLTC
-		bgcolor = (int)(k54338_regs_bak[K338_REG_BGC_R]&0xff)<<16 | (int)k54338_regs_bak[K338_REG_BGC_GB];
+		bgcolor = (int)(k54338_regs[K338_REG_BGC_R]&0xff)<<16 | (int)k54338_regs[K338_REG_BGC_GB];
 	}
 	else
 	{
@@ -217,8 +211,8 @@ INT32 K054338_set_alpha_level(INT32 pblend)
 		return(255);
 	}
 
-	regs   = k54338_regs_bak;
-	ctrl   = k54338_regs_bak[K338_REG_CONTROL];
+	regs   = k54338_regs;
+	ctrl   = k54338_regs[K338_REG_CONTROL];
 	mixpri = ctrl & K338_CTL_MIXPRI;
 	mixset = regs[K338_REG_PBLEND + (pblend>>1 & 1)] >> (~pblend<<3 & 8);
 	mixlv  = mixset & 0x1f;
@@ -263,8 +257,8 @@ INT32 K054338_alpha_level_moo(INT32 pblend)
 		return(255);
 	}
 
-	regs   = k54338_regs_bak;
-	ctrl   = k54338_regs_bak[K338_REG_CONTROL];
+	regs   = k54338_regs;
+	ctrl   = k54338_regs[K338_REG_CONTROL];
 	mixpri = ctrl & K338_CTL_MIXPRI;
 	mixset = regs[K338_REG_PBLEND + (pblend>>1 & 1)] >> (~pblend<<3 & 8);
 	mixlv  = mixset & 0x1f;

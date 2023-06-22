@@ -10,11 +10,9 @@
 #define K053247_SHDSHIFT		20
 
 static UINT8  K053246Regs[8];
-static UINT8  K053246RegsBak[8];
 static UINT8  K053246_OBJCHA_line;
 UINT8 *K053247Ram;
 static UINT16 K053247Regs[16];
-static UINT16 K053247RegsBak[16];
 
 static UINT8 *K053246Gfx;
 static UINT32   K053246Mask;
@@ -30,12 +28,6 @@ static INT32 nBpp = 4;
 static INT32 K053247Flags;
 
 void (*K053247Callback)(INT32 *code, INT32 *color, INT32 *priority);
-
-void K053247CopyBak()
-{
-	memcpy(K053246RegsBak, K053246Regs, 8);
-	memcpy(K053247RegsBak, K053247Regs, 32);
-}
 
 void K053247Reset()
 {
@@ -181,12 +173,12 @@ void K053247WriteRegsWord(INT32 offset, UINT16 data)
 
 UINT16 K053247ReadRegs(INT32 offset)
 {
-	return K053247RegsBak[offset & 0xf];
+	return K053247Regs[offset & 0xf];
 }
 
 UINT16 K053246ReadRegs(INT32 offset)
 {
-	return K053246RegsBak[offset & 7];
+	return K053246Regs[offset & 7];
 }
 
 UINT8 K053246Read(INT32 offset)
@@ -247,10 +239,10 @@ void K053247SpritesRender()
 	INT32 ox,oy,color,code,size,w,h,x,y,xa,ya,flipx,flipy,mirrorx,mirrory,shadow,zoomx,zoomy,primask;
 	INT32 nozoom,count,temp,shdmask;
 
-	INT32 flipscreenx = K053246RegsBak[5] & 0x01;
-	INT32 flipscreeny = K053246RegsBak[5] & 0x02;
-	INT32 offx = (INT16)((K053246RegsBak[0] << 8) | K053246RegsBak[1]);
-	INT32 offy = (INT16)((K053246RegsBak[2] << 8) | K053246RegsBak[3]);
+	INT32 flipscreenx = K053246Regs[5] & 0x01;
+	INT32 flipscreeny = K053246Regs[5] & 0x02;
+	INT32 offx = (INT16)((K053246Regs[0] << 8) | K053246Regs[1]);
+	INT32 offy = (INT16)((K053246Regs[2] << 8) | K053246Regs[3]);
 
 	UINT16 *SprRam = (UINT16*)K053247Ram;
 
@@ -370,7 +362,7 @@ void K053247SpritesRender()
 		}
 		else { zoomx = zoomy; x = y; }
 
-		if ( K053246RegsBak[5] & 0x08 ) // Check only "Bit #3 is '1'?" (NOTE: good guess)
+		if ( K053246Regs[5] & 0x08 ) // Check only "Bit #3 is '1'?" (NOTE: good guess)
 		{
 			zoomx >>= 1;		// Fix sprite width to HALF size
 			ox = (ox >> 1) + 1;	// Fix sprite draw position
@@ -1145,8 +1137,8 @@ void k053247_draw_single_sprite_gxcore(UINT8 *gx_objzbuf, UINT8 *gx_shdzbuf, INT
 	{
 		INT32 xa,ya,ox,oy,flipx,flipy,mirrorx,mirrory,zoomx,zoomy,scalex,scaley,nozoom;
 		INT32 temp, temp4;
-		INT32 flipscreenx = K053246RegsBak[5] & 0x01;
-		INT32 flipscreeny = K053246RegsBak[5] & 0x02;
+		INT32 flipscreenx = K053246Regs[5] & 0x01;
+		INT32 flipscreeny = K053246Regs[5] & 0x02;
 
 		xa = ya = 0;
 		if (code & 0x01) xa += 1;
@@ -1216,8 +1208,8 @@ void k053247_draw_single_sprite_gxcore(UINT8 *gx_objzbuf, UINT8 *gx_shdzbuf, INT
 		}
 
 		// get "display window" offsets
-		INT32 offx = (INT16)((K053246RegsBak[0] << 8) | K053246RegsBak[1]);
-		INT32 offy = (INT16)((K053246RegsBak[2] << 8) | K053246RegsBak[3]);
+		INT32 offx = (INT16)((K053246Regs[0] << 8) | K053246Regs[1]);
+		INT32 offy = (INT16)((K053246Regs[2] << 8) | K053246Regs[3]);
 
 		// apply wrapping and global offsets
 		temp = wrapsize-1;
