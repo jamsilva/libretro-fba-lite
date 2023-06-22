@@ -1,9 +1,9 @@
 *.so
 *.o
+*.a
 *.dll
 *.lib
 *.pdb
 *.exp
+。exe
 *.manifest
-/nul
-*.a

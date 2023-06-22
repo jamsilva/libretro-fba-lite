@@ -291,6 +291,9 @@ DRV		BurnDrvPgmfrog;
 DRV		BurnDrvFuncube2;		// Unemulated Sub CPU [NOT WORKING]
 DRV		BurnDrvFuncube4;		// Unemulated Sub CPU [NOT WORKING]
 #endif
+DRV		BurnDrvGaiapols;
+DRV		BurnDrvGaiapolsj;
+DRV		BurnDrvGaiapolsu;
 DRV		BurnDrvneogalag;
 DRV		BurnDrvneogalaga;
 DRV		BurnDrvgalaxyfg;
@@ -460,6 +463,7 @@ DRV		BurnDrvkof2k2omg9b;
 DRV		BurnDrvkof2k2omg9;
 DRV		BurnDrvMyangel;
 DRV		BurnDrvMyangel2;
+DRV		BurnDrvDadandrn;
 DRV		BurnDrvlans2004;
 DRV		BurnDrvlasthope;
 DRV		BurnDrvlhcdb;
@@ -489,6 +493,12 @@ DRV		BurnDrvMajtitl2b;
 DRV		BurnDrvCpsMarsMatrixJ;
 DRV		BurnDrvCpsMarsMatrixd;
 DRV		BurnDrvCpsMarsMatrix;
+DRV		BurnDrvMtlchampa;
+DRV		BurnDrvMtlchamp1;
+DRV		BurnDrvMtlchamp;
+DRV		BurnDrvMtlchampj;
+DRV		BurnDrvMtlchampu1;
+DRV		BurnDrvMtlchampu;
 DRV		BurnDrvmartmastc102;
 DRV		BurnDrvmartmasttw;
 DRV		BurnDrvmartmastc103;
@@ -559,6 +569,11 @@ DRV		BurnDrvMslug5w;
 DRV		BurnDrvms5plus;
 DRV		BurnDrvmslug3b6;
 DRV		BurnDrvMSlugX;
+DRV		BurnDrvMetamrpha;
+DRV		BurnDrvMetamrphe;
+DRV		BurnDrvMetamrph;
+DRV		BurnDrvMetamrphj;
+DRV		BurnDrvMetamrphu;
 DRV		BurnDrvCpsMPangr1;
 DRV		BurnDrvCpsMPang;
 DRV		BurnDrvCpsMPangu;
@@ -567,6 +582,7 @@ DRV		BurnDrvCpsMPangj;
 DRV		BurnDrvminasan;
 DRV		BurnDrvGundamex;
 DRV		BurnDrvmiexchng;
+DRV		BurnDrvMmaulers;
 DRV		BurnDrvCpsMbomberj;
 //		BurnDrvCpsMbombdje;		// no comment
 DRV		BurnDrvCpsMbombrdj;
@@ -577,6 +593,11 @@ DRV		BurnDrvCpsMbombrd;
 DRV		BurnDrvMutnat;
 DRV		BurnDrvMysticrib;
 DRV		BurnDrvMysticri;
+DRV		BurnDrvMystwarraa;
+DRV		BurnDrvMystwarra;
+DRV		BurnDrvMystwarr;
+DRV		BurnDrvMystwarrj;
+DRV		BurnDrvMystwarru;
 DRV		BurnDrvNam1975;
 DRV		BurnDrvCpsNemor1;
 DRV		BurnDrvCpsNemoj;
@@ -774,6 +795,9 @@ DRV		BurnDrvSengoku3s;
 DRV		BurnDrvSengoku3;
 DRV		BurnDrvSengoku3a;
 DRV		BurnDrvCpsMercsj;
+DRV		BurnDrvShadfrcej;
+DRV		BurnDrvShadfrceu;
+DRV		BurnDrvShadfrce;
 DRV		BurnDrvbeast;
 DRV		BurnDrvshocktro;
 DRV		BurnDrvshocktroa;
@@ -1217,6 +1241,13 @@ DRV		BurnDrvCpsVarthjr;
 DRV		BurnDrvCpsVarthj;
 DRV		BurnDrvCpsVarthb;
 DRV		BurnDrvviewpoin;
+DRV		BurnDrvViostormab;
+DRV		BurnDrvViostorma;
+DRV		BurnDrvViostormeb;
+DRV		BurnDrvViostorm;
+DRV		BurnDrvViostormj;
+DRV		BurnDrvViostormub;
+DRV		BurnDrvViostormu;
 DRV		BurnDrvgowcaizr;
 DRV		BurnDrvMj4simai;
 DRV		BurnDrvwakuwak7;
@@ -1584,6 +1615,9 @@ static struct BurnDriver* pDriver[] = {
 	&BurnDrvFuncube2,			// Funcube 2 (v1.1) [Unemulated Sub CPU, NOT WORKING]
 	&BurnDrvFuncube4,			// Funcube 4 (v1.0) [Unemulated Sub CPU, NOT WORKING]
 #endif
+	&BurnDrvGaiapols,			// Gaiapolis (ver EAF)
+	&BurnDrvGaiapolsj,			// Gaiapolis (ver JAF)
+	&BurnDrvGaiapolsu,			// Gaiapolis (ver UAF)
 	&BurnDrvneogalag,			// Galaga Demo (set 1)
 	&BurnDrvneogalaga,			// Galaga Demo (set 2)
 	&BurnDrvgalaxyfg,			// Galaxy Fight - Universal Warriors
@@ -1753,6 +1787,7 @@ static struct BurnDriver* pDriver[] = {
 	&BurnDrvkof2k2omg9,			// Kof2002 (Omega v0.9)
 	&BurnDrvMyangel,			// Kosodate Quiz My Angel (Japan)
 	&BurnDrvMyangel2,			// Kosodate Quiz My Angel 2 (Japan)
+	&BurnDrvDadandrn,			// Kyukyoku Sentai Dadandarn (ver JAA)
 	&BurnDrvlans2004,			// Lansquenet 2004 (Shock Troopers - 2nd Squad bootleg)
 	&BurnDrvlasthope,			// Last Hope (bootleg AES to MVS conversion, no coin support)
 	&BurnDrvlhcdb,				// Last Hope CD Beta (Neo CD conversion)
@@ -1782,6 +1817,12 @@ static struct BurnDriver* pDriver[] = {
 	&BurnDrvCpsMarsMatrixJ,		// Mars Matrix (000412 Japan)
 	&BurnDrvCpsMarsMatrixd,		// Mars Matrix (000412 USA Phoenix Edition)
 	&BurnDrvCpsMarsMatrix,		// Mars Matrix (000412 USA)
+	&BurnDrvMtlchampa,			// Martial Champion (ver AAA)
+	&BurnDrvMtlchamp1,			// Martial Champion (ver EAA)
+	&BurnDrvMtlchamp,			// Martial Champion (ver EAB)
+	&BurnDrvMtlchampj,			// Martial Champion (ver JAA)
+	&BurnDrvMtlchampu1,			// Martial Champion (ver UAD)
+	&BurnDrvMtlchampu,			// Martial Champion (ver UAE)
 	&BurnDrvmartmastc102,		// Martial Masters (V102, 101, 101, China)
 	&BurnDrvmartmasttw,			// Martial Masters (V102, 101, 101, Taiwan) [no comment, NOT WORKING]
 	&BurnDrvmartmastc103,		// Martial Masters (V103, 102, 101, China)
@@ -1852,6 +1893,11 @@ static struct BurnDriver* pDriver[] = {
 	&BurnDrvms5plus,			// Metal Slug 5 Plus (bootleg)
 	&BurnDrvmslug3b6,			// Metal Slug 6 (Metal Slug 3 bootleg)
 	&BurnDrvMSlugX,				// Metal Slug X - Super Vehicle-001 (NGM-2500)(NGH-2500)
+	&BurnDrvMetamrpha,			// Metamorphic Force (ver AAA)
+	&BurnDrvMetamrphe,			// Metamorphic Force (ver EAA - alternate)
+	&BurnDrvMetamrph,			// Metamorphic Force (ver EAA)
+	&BurnDrvMetamrphj,			// Metamorphic Force (ver JAA)
+	&BurnDrvMetamrphu,			// Metamorphic Force (ver UAA)
 	&BurnDrvCpsMPangr1,			// Mighty! Pang (000925 Euro)
 	&BurnDrvCpsMPang,			// Mighty! Pang (001010 Euro)
 	&BurnDrvCpsMPangu,			// Mighty! Pang (001010 USA)
@@ -1860,6 +1906,7 @@ static struct BurnDriver* pDriver[] = {
 	&BurnDrvminasan,			// Minasanno Okagesamadesu! Daisugorokutaikai (MOM-001)(MOH-001)
 	&BurnDrvGundamex,			// Mobile Suit Gundam EX Revue
 	&BurnDrvmiexchng,			// Money Puzzle Exchanger / Money Idol Exchanger
+	&BurnDrvMmaulers,			// Monster Maulers (ver EAA)
 	&BurnDrvCpsMbomberj,		// Muscle Bomber - the body explosion (930713 Japan)
 //	&BurnDrvCpsMbombdje,		// Muscle Bomber Duo - heat up warriors (931206 Japan E) [no comment]
 	&BurnDrvCpsMbombrdj,		// Muscle Bomber Duo - heat up warriors (931206 Japan)
@@ -1870,6 +1917,11 @@ static struct BurnDriver* pDriver[] = {
 	&BurnDrvMutnat,				// Mutation Nation (NGM-014)(NGH-014)
 	&BurnDrvMysticrib,			// Mystic Riders (bootleg?)
 	&BurnDrvMysticri,			// Mystic Riders (World)
+	&BurnDrvMystwarraa,			// Mystic Warriors (ver AAA)
+	&BurnDrvMystwarra,			// Mystic Warriors (ver AAB)
+	&BurnDrvMystwarr,			// Mystic Warriors (ver EAA)
+	&BurnDrvMystwarrj,			// Mystic Warriors (ver JAA)
+	&BurnDrvMystwarru,			// Mystic Warriors (ver UAA)
 	&BurnDrvNam1975,			// NAM-1975 (NGM-001)(NGH-001)
 	&BurnDrvCpsNemor1,			// Nemo (90 11 09 etc)
 	&BurnDrvCpsNemoj,			// Nemo (90 11 20 Japan)
@@ -2067,6 +2119,9 @@ static struct BurnDriver* pDriver[] = {
 	&BurnDrvSengoku3,			// Sengoku 3 / Sengoku Densho 2001 (set 1)
 	&BurnDrvSengoku3a,			// Sengoku 3 / Sengoku Densho 2001 (Set 2)
 	&BurnDrvCpsMercsj,			// Senjo no Ookami II (Ookami 2 900302 Japan)
+	&BurnDrvShadfrcej,			// Shadow Force (Japan, Version 2)
+	&BurnDrvShadfrceu,			// Shadow Force (US, Version 2)
+	&BurnDrvShadfrce,			// Shadow Force (World, Version 3)
 	&BurnDrvbeast,				// Shadow of the Beast (Neo Geo demo)
 	&BurnDrvshocktro,			// Shock Troopers (set 1)
 	&BurnDrvshocktroa,			// Shock Troopers (set 2)
@@ -2510,6 +2565,13 @@ static struct BurnDriver* pDriver[] = {
 	&BurnDrvCpsVarthj,			// Varth - operation thunderstorm (920714 Japan)
 	&BurnDrvCpsVarthb,			// Varth - operation thunderstorm (bootleg, 920612 etc)
 	&BurnDrvviewpoin,			// Viewpoint
+	&BurnDrvViostormab,			// Violent Storm (ver AAB)
+	&BurnDrvViostorma,			// Violent Storm (ver AAC)
+	&BurnDrvViostormeb,			// Violent Storm (ver EAB)
+	&BurnDrvViostorm,			// Violent Storm (ver EAC)
+	&BurnDrvViostormj,			// Violent Storm (ver JAC)
+	&BurnDrvViostormub,			// Violent Storm (ver UAB)
+	&BurnDrvViostormu,			// Violent Storm (ver UAC)
 	&BurnDrvgowcaizr,			// Voltage Fighter - Gowcaizer / Choujin Gakuen Gowcaizer
 	&BurnDrvMj4simai,			// Wakakusamonogatari Mahjong Yonshimai (Japan)
 	&BurnDrvwakuwak7,			// Waku Waku 7

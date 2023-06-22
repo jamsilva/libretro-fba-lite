@@ -29,7 +29,7 @@ static INT32 __cdecl BzipBurnLoadRom(UINT8 *Dest, INT32 *pnWrote, INT32 i)
     if (i < 0 || i >= vecRomFindList.size())
         return 1;
 
-    log_cb(RETRO_LOG_INFO, "[Load ROM] %s...\n", vecRomFindList[i].pszName);
+    log_cb(RETRO_LOG_INFO, "[LOAD ROM] %s...\n", vecRomFindList[i].pszName);
 
     INT32 nWantZip = vecRomFindList[i].nZip;
     if (nCurrentZip != nWantZip)
@@ -43,11 +43,11 @@ static INT32 __cdecl BzipBurnLoadRom(UINT8 *Dest, INT32 *pnWrote, INT32 i)
 
     if (ZipLoadFile(Dest, vecRomFindList[i].nLen, pnWrote, vecRomFindList[i].nPos) != 0)
         goto ERROR;
-    // log_cb(RETRO_LOG_INFO, "[Load ROM] %s...OK!\n", vecRomFindList[i].pszName);
+    // log_cb(RETRO_LOG_INFO, "[LOAD ROM] %s...OK!\n", vecRomFindList[i].pszName);
     return 0;
 
 ERROR:
-    log_cb(RETRO_LOG_INFO, "[Load ROM] %s...Failed!\n", vecRomFindList[i].pszName);
+    log_cb(RETRO_LOG_INFO, "[LOAD ROM] %s --- failed!\n", vecRomFindList[i].pszName);
     return 1;
 }
 
@@ -114,7 +114,7 @@ static INT32 LocateZipPath(const char *pszName)
     snprintf(szPath, MAX_PATH, "%s%s", szAppRomDir, pszName);
     if (CheckZipExist(szPath))
     {
-        log_cb(RETRO_LOG_INFO, "Locate the archive %s in %s\n", pszName, szPath);
+        log_cb(RETRO_LOG_INFO, "[CHECK ROM] Find %s OK!\n", pszName);
         vecZipPathList.push_back(szPath);
         return 0;
     }
@@ -122,12 +122,12 @@ static INT32 LocateZipPath(const char *pszName)
     snprintf(szPath, MAX_PATH, "%s%s", szAppSystemDir, pszName);
     if (CheckZipExist(szPath))
     {
-        log_cb(RETRO_LOG_INFO, "Locate the archive %s in %s\n", pszName, szPath);
+        log_cb(RETRO_LOG_INFO, "[CHECK ROM] Find %s OK!\n", pszName);
         vecZipPathList.push_back(szPath);
         return 0;
     }
 
-    log_cb(RETRO_LOG_ERROR, "Locate the archive %s failed!\n", pszName);
+    log_cb(RETRO_LOG_ERROR, "[CHECK ROM] Find %s failed!\n", pszName);
     return -1;
 }
 
@@ -139,12 +139,12 @@ INT32 BzipOpen()
 
     nRet = 1;
     BzipClose();
+    ResetNeogeoBiosInfos();
 
     for (INT32 i = 0; BurnDrvGetZipName(&pszName, i) == 0; i++)
     {
         if (i == 0)
             pszName = szAppDrvName;
-        log_cb(RETRO_LOG_INFO, "Required archive: %s\n", pszName);
         LocateZipPath(pszName);
     }
 
@@ -164,7 +164,7 @@ INT32 BzipOpen()
     {
         if (ZipOpen((char *)vecZipPathList[nZip].c_str()) != 0)
         {
-            log_cb(RETRO_LOG_ERROR, "Open archive: %s...failed!\n", vecZipPathList[nZip].c_str());
+            log_cb(RETRO_LOG_ERROR, "[CHECK ROM] Open %s failed!\n", vecZipPathList[nZip].c_str());
             return 1;
         }
 
@@ -194,7 +194,7 @@ INT32 BzipOpen()
 
             if (List[nPos].nLen != vecRomFindList[i].nLen)
             {
-                log_cb(RETRO_LOG_WARN, "[Check ROM] %s, %u, 0x%08x...!size=%u\n",
+                log_cb(RETRO_LOG_WARN, "[CHECK ROM] %s, %u, 0x%08x --- size=%u!\n",
                        vecRomFindList[i].pszName, vecRomFindList[i].nLen, vecRomFindList[i].nCrc, List[nPos].nLen);
                 vecRomFindList[i].nState = STATUS_MISMATCH_SIZE;
                 continue;
@@ -202,14 +202,14 @@ INT32 BzipOpen()
 
             if (vecRomFindList[i].nCrc && vecRomFindList[i].nCrc != List[nPos].nCrc)
             {
-                log_cb(RETRO_LOG_WARN, "[Check ROM] %s, %u, 0x%08x...!crc=0x%08x\n",
+                log_cb(RETRO_LOG_WARN, "[CHECK ROM] %s, %u, 0x%08x --- crc=0x%08x!\n",
                        vecRomFindList[i].pszName, vecRomFindList[i].nLen, vecRomFindList[i].nCrc, List[nPos].nCrc);
                 // vecRomFindList[i].nState = STATUS_MISMATCH_CRC;
                 // continue;
             }
             else
             {
-                log_cb(RETRO_LOG_INFO, "[Check ROM] %s, %u, 0x%08x...OK!\n",
+                log_cb(RETRO_LOG_INFO, "[CHECK ROM] %s, %u, 0x%08x --- OK!\n",
                        vecRomFindList[i].pszName, vecRomFindList[i].nLen, vecRomFindList[i].nCrc);
             }
 
@@ -217,7 +217,7 @@ INT32 BzipOpen()
             vecRomFindList[i].nPos = nPos;
             vecRomFindList[i].nState = STATUS_OK;
 
-            if (bBurnNeogeoGame)
+            if (IS_NEOGEO_GAME)
                 SetNeogeoBiosAvailability(List[nPos].szName, List[nPos].nCrc);
         }
 
@@ -233,12 +233,12 @@ INT32 BzipOpen()
             nRet = 1;
             if (vecRomFindList[i].nState == STATUS_MISSING)
             {
-                log_cb(RETRO_LOG_ERROR, "[Check ROM] %s, %u, 0x%08x...missing!\n",
+                log_cb(RETRO_LOG_ERROR, "[CHECK ROM] %s, %u, 0x%08x --- missing!\n",
                        vecRomFindList[i].pszName, vecRomFindList[i].nLen, vecRomFindList[i].nCrc);
             }
             else
             {
-                log_cb(RETRO_LOG_WARN, "[Check ROM] %s, %u, 0x%08x...mismatching!\n",
+                log_cb(RETRO_LOG_WARN, "[CHECK ROM] %s, %u, 0x%08x --- mismatching!\n",
                        vecRomFindList[i].pszName, vecRomFindList[i].nLen, vecRomFindList[i].nCrc);
             }
         }
@@ -251,9 +251,6 @@ INT32 BzipOpen()
 
 INT32 BzipClose()
 {
-    if (bBurnNeogeoGame)
-        ResetNeogeoBiosInfos();
-
     BurnExtLoadRom = NULL;
 
     vecZipPathList.clear();

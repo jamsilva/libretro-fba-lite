@@ -38,13 +38,13 @@ void BurnMakeAppPaths(const char *szRomPath)
     {
         strncpy(szAppSaveDir, szTmpPath, MAX_PATH);
         BurnAddEndSlash(szAppSaveDir, MAX_PATH);
-        log_cb(RETRO_LOG_INFO, "Setting save dir to %s\n", szAppSaveDir);
+        log_cb(RETRO_LOG_INFO, "[FBA] Save dir: %s\n", szAppSaveDir);
     }
     else
     {
         // ... otherwise use rom directory
         strncpy(szAppSaveDir, szAppRomDir, MAX_PATH);
-        log_cb(RETRO_LOG_INFO, "Save dir not defined => use roms dir %s\n", szAppSaveDir);
+        log_cb(RETRO_LOG_INFO, "[FBA] Save dir: %s\n", szAppSaveDir);
     }
 
     // If system directory is defined use it, ...
@@ -52,13 +52,13 @@ void BurnMakeAppPaths(const char *szRomPath)
     {
         strncpy(szAppSystemDir, szTmpPath, MAX_PATH);
         BurnAddEndSlash(szAppSystemDir, MAX_PATH);
-        log_cb(RETRO_LOG_INFO, "Setting system dir to %s\n", szAppSystemDir);
+        log_cb(RETRO_LOG_INFO, "[FBA] System dir: %s\n", szAppSystemDir);
     }
     else
     {
         // ... otherwise use rom directory
         strncpy(szAppSystemDir, szAppRomDir, MAX_PATH);
-        log_cb(RETRO_LOG_INFO, "System dir not defined => use roms dir %s\n", szAppSystemDir);
+        log_cb(RETRO_LOG_INFO, "[FBA] System dir: %s\n", szAppSystemDir);
     }
 
     // Init data path

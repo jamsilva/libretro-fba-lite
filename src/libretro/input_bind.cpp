@@ -40,9 +40,9 @@ static void InputBindGetDIPOffset()
 		nInputBindDIPOffset = -1;
 
 	if (nInputBindDIPOffset < 0)
-		log_cb(RETRO_LOG_INFO, "Get dipswitch input offset failed!\n");
+		log_cb(RETRO_LOG_INFO, "[FBA] Get dipswitch input offset failed!\n");
 	else
-		log_cb(RETRO_LOG_INFO, "Get dipswitch input offset: %d\n", nInputBindDIPOffset);
+		log_cb(RETRO_LOG_INFO, "[FBA] Dipswitch input offset: %d\n", nInputBindDIPOffset);
 }
 
 static void InputBindGetResetOffset()
@@ -63,9 +63,9 @@ static void InputBindGetResetOffset()
 		nInputBindResetOffset = -1;
 
 	if (nInputBindResetOffset < 0)
-		log_cb(RETRO_LOG_INFO, "Get reset input offset failed!\n");
+		log_cb(RETRO_LOG_INFO, "[FBA] No reset input Finded!\n");
 	else
-		log_cb(RETRO_LOG_INFO, "Get reset input offset: %d\n", nInputBindResetOffset);
+		log_cb(RETRO_LOG_INFO, "[FBA] Reset input offset: %d\n", nInputBindResetOffset);
 }
 
 static void InputBindGetDiagOffset()
@@ -86,9 +86,9 @@ static void InputBindGetDiagOffset()
 		nInputBindDiagOffset = -1;
 
 	if (nInputBindDiagOffset < 0)
-		log_cb(RETRO_LOG_INFO, "Get diagnostic input offset failed!\n");
+		log_cb(RETRO_LOG_INFO, "[FBA] No diagnostic input Finded!\n");
 	else
-		log_cb(RETRO_LOG_INFO, "Get diagnostic input offset: %d\n", nInputBindDiagOffset);
+		log_cb(RETRO_LOG_INFO, "[FBA] Diagnostic input offset: %d\n", nInputBindDiagOffset);
 }
 
 static INT32 InputBindDIPsInit()

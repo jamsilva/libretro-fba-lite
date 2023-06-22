@@ -266,7 +266,7 @@ INT32 BurnDrvLoadExtDriver(const char *szPath)
     int nBoardDrvIndex;
     struct BurnDriver **pDriver;
 
-    log_cb(RETRO_LOG_INFO, "BurnDrvLoadExtDriver: %s\n", szPath);
+    log_cb(RETRO_LOG_INFO, "[FBA] Load external driver: %s\n", szPath);
 
     fp = NULL;
     Buffer = NULL;
@@ -309,7 +309,7 @@ INT32 BurnDrvLoadExtDriver(const char *szPath)
     if (!szDep)
         goto END;
     
-    log_cb(RETRO_LOG_INFO, "External driver depend on: %s\n", szDep);
+    log_cb(RETRO_LOG_INFO, "[FBA] External driver depend on: %s\n", szDep);
 
     nDrvActive = BurnDrvGetIndexByName(szDep);
     if (nDrvActive == ~0U)
@@ -416,11 +416,11 @@ END:
     if (nBurnDrvActive == ~0U || nBurnDrvActive >= nBurnDrvCount)
     {
         BurnDrvUnloadExtDriver();
-        log_cb(RETRO_LOG_ERROR, "BurnDrvLoadExtDriver failed!\n");
+        log_cb(RETRO_LOG_ERROR, "[FBA] Load external driver failed!\n");
     }
     else
     {
-        log_cb(RETRO_LOG_INFO, "BurnDrvLoadExtDriver OK!\n");
+        log_cb(RETRO_LOG_INFO, "[FBA] Load external driver OK!\n");
     }
 
     return nBurnDrvActive;
@@ -435,7 +435,7 @@ void BurnDrvUnloadExtDriver()
     if (!pExtDriverEntry)
         return;
 
-    log_cb(RETRO_LOG_INFO, "BurnDrvUnloadExtDriver...\n");
+    log_cb(RETRO_LOG_INFO, "[FBA] Unload external driver...\n");
 
     BurnDrvGetDriverList(&pDriver);
 

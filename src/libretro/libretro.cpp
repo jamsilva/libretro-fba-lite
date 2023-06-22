@@ -23,9 +23,6 @@ INT32 nAudSampleRate = 48000;
 INT32 nAnalogSpeed = 0x0100;
 UINT8 *pDiagActivatedKey = NULL;
 
-bool bBurnNeogeoGame = false;
-bool bBurnPgmGame = false;
-
 retro_log_printf_t log_cb = NULL;
 retro_environment_t environ_cb = NULL;
 retro_video_refresh_t video_cb = NULL;
@@ -256,30 +253,27 @@ static bool retro_load_game_common(const char *szRomPath)
 
 	if (nBurnDrvActive == ~0U)
 	{
-		log_cb(RETRO_LOG_ERROR, "Can't launch this game, it's unknown\n");
+		log_cb(RETRO_LOG_ERROR, "[FBA] Can't launch this game, it's unset\n");
 		return false;
 	}
 	if (!(BurnDrvIsWorking()))
 	{
-		log_cb(RETRO_LOG_ERROR, "Can't launch this game, it's marked as not working\n");
+		log_cb(RETRO_LOG_ERROR, "[FBA] Can't launch this game, it's marked as not working\n");
 		return false;
 	}
 	if ((BurnDrvGetFlags() & BDF_BOARDROM))
 	{
-		log_cb(RETRO_LOG_ERROR, "Board rom isn't meant to be launched this way\n");
+		log_cb(RETRO_LOG_ERROR, "[FBA] Board rom isn't meant to be launched this way\n");
 		return false;
 	}
 
 	const char *szFullName = BurnDrvGetTextA(DRV_FULLNAME);
 	if (szFullName)
-		log_cb(RETRO_LOG_ERROR, "Full name: %s\n", szFullName);
-
-	bBurnNeogeoGame = ((BurnDrvGetHardwareCode() & HARDWARE_PUBLIC_MASK) == HARDWARE_SNK_NEOGEO);
-	bBurnPgmGame = ((BurnDrvGetHardwareCode() & HARDWARE_PUBLIC_MASK) == HARDWARE_IGS_PGM);
+		log_cb(RETRO_LOG_ERROR, "[FBA] Full name: %s\n", szFullName);
 
 	if (BzipOpen() != 0)
 	{
-		log_cb(RETRO_LOG_INFO, "Launch game %s failed at check rom!\n", szAppRomName);
+		log_cb(RETRO_LOG_INFO, "[FBA] Launch game %s failed at check rom!\n", szAppRomName);
 		return false;
 	}
 
@@ -294,7 +288,7 @@ static bool retro_load_game_common(const char *szRomPath)
 	if (BurnDrvInit() != 0)
 	{
 		BurnDrvExit();
-		log_cb(RETRO_LOG_INFO, "Launch game %s failed at init driver!\n", szAppRomName);
+		log_cb(RETRO_LOG_INFO, "[FBA] Launch game %s failed at init driver!\n", szAppRomName);
 		return false;
 	}
 
@@ -310,7 +304,7 @@ static bool retro_load_game_common(const char *szRomPath)
 
 	BurnAVPlayInit();
 
-	log_cb(RETRO_LOG_INFO, "Launch game %s OK!\n", szAppRomName);
+	log_cb(RETRO_LOG_INFO, "[FBA] Launch game %s OK!\n", szAppRomName);
 	nBurnDrvOkay = 1;
 
 	return true;

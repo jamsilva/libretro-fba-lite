@@ -71,7 +71,7 @@ static void CreateDipVariables()
         if ((bdi.nFlags != 0xFE && bdi.nFlags != 0xFD) || bdi.nSetting < 1)
             continue;
 
-        if (bBurnNeogeoGame && !bNeoSystemSetEnabled && bdi.szText && strcasecmp(bdi.szText, "BIOS") == 0)
+        if (IS_NEOGEO_GAME && !bNeoSystemSetEnabled && bdi.szText && strcasecmp(bdi.szText, "BIOS") == 0)
             continue;
 
         vecDipOptions.push_back(DipOption());
@@ -86,7 +86,7 @@ static void CreateDipVariables()
         else // ... so, to not hang, we will generate a name based on the position of the dip (DIPSWITCH 1, DIPSWITCH 2...)
         {
             sprintf(szTempText, "DIPSWITCH %d", vecDipOptions.size());
-            log_cb(RETRO_LOG_WARN, "Error in DIPList : The DIPSWITCH '%d' has no name. '%s' name has been generated\n", vecDipOptions.size(), szTempText);
+            log_cb(RETRO_LOG_WARN, "[FBA] Error in DIPList : The DIPSWITCH '%d' has no name. '%s' name has been generated\n", vecDipOptions.size(), szTempText);
         }
 
         strncpy(pOption->szDesc, szTempText, sizeof(pOption->szDesc));
@@ -113,13 +113,13 @@ static void CreateDipVariables()
 
             if (BurnDrvGetDIPInfo(&bdi2, k) != 0)
             {
-                log_cb(RETRO_LOG_WARN, "Error in DIPList for DIPSWITCH '%s': End of the struct was reached too early\n", pOption->szDesc);
+                log_cb(RETRO_LOG_WARN, "[FBA] Error in DIPList for DIPSWITCH '%s': End of the struct was reached too early\n", pOption->szDesc);
                 break;
             }
 
             if (bdi2.nFlags == 0xFE || bdi2.nFlags == 0xFD)
             {
-                log_cb(RETRO_LOG_WARN, "Error in DIPList for DIPSWITCH '%s': Start of next DIPSWITCH is too early\n", pOption->szDesc);
+                log_cb(RETRO_LOG_WARN, "[FBA] Error in DIPList for DIPSWITCH '%s': Start of next DIPSWITCH is too early\n", pOption->szDesc);
                 break;
             }
 
@@ -134,14 +134,14 @@ static void CreateDipVariables()
             if (!pbii->pVal)
             {
                 vecDipOptions.pop_back();
-                log_cb(RETRO_LOG_WARN, "Error in DIPList for DIPSWITCH '%s': the line '%d' is unusable\n", pOption->szDesc, k);
+                log_cb(RETRO_LOG_WARN, "[FBA] Error in DIPList for DIPSWITCH '%s': the line '%d' is unusable\n", pOption->szDesc, k);
                 break;
             }
 
             // Filter away NULL entries
             if (bdi2.nFlags == 0)
             {
-                log_cb(RETRO_LOG_WARN, "Error in DIPList for DIPSWITCH '%s': the line '%d' is useless\n", pOption->szDesc, k);
+                log_cb(RETRO_LOG_WARN, "[FBA] Error in DIPList for DIPSWITCH '%s': the line '%d' is useless\n", pOption->szDesc, k);
                 continue;
             }
 
@@ -168,7 +168,7 @@ void BurnSetVariables()
 {
     std::vector<const retro_core_option_definition *> vecSysOptions;
 
-    if (bBurnNeogeoGame)
+    if (IS_NEOGEO_GAME)
         CheckNeoSystemSetEnabled();
 
     CreateDipVariables();
@@ -186,7 +186,7 @@ void BurnSetVariables()
     vecSysOptions.push_back(&var_fba_fm_interpolation);
     // vecSysOptions.push_back(&var_fba_analog_speed);
 #ifdef USE_CYCLONE
-    if (bBurnPgmGame)
+    if (IS_PGM_GAME || IS_KONAMI_GAME || IS_TECHNOS_GAME)
         var_fba_cyclone.default_value = enabled_value;
     else
         var_fba_cyclone.default_value = disabled_value;
@@ -196,7 +196,7 @@ void BurnSetVariables()
     if (nInputBindDiagOffset >= 0)
         vecSysOptions.push_back(&var_fba_diagnostic_input);
 
-    if (bBurnNeogeoGame && bNeoSystemSetEnabled)
+    if (IS_NEOGEO_GAME && bNeoSystemSetEnabled)
         vecSysOptions.push_back(&var_fba_neogeo_mode);
 
     INT32 nSysOptionsCount = vecSysOptions.size();
@@ -466,7 +466,7 @@ static void CheckVariables(void)
         }
     }
 
-    if (bBurnNeogeoGame && bNeoSystemSetEnabled)
+    if (IS_NEOGEO_GAME && bNeoSystemSetEnabled)
     {
         var.key = var_fba_neogeo_mode.key;
         if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var))
@@ -549,8 +549,14 @@ void BurnUpdateVariables()
         nSekCpuCore = (bCycloneEnabled ? 0 : 1);
 #endif
     }
-    
-    if ((BurnDrvGetFlags() & BDF_16BIT_ONLY) || !bColorDepth32Enabled || bBurnPgmGame)
+
+    if (IS_PGM_GAME)
+        nBurnColorDepth = 16;
+    else if (IS_KONAMI_GAME)
+        nBurnColorDepth = 32;
+    else if ((BurnDrvGetFlags() & BDF_16BIT_ONLY))
+        nBurnColorDepth = 16;
+    else if (!bColorDepth32Enabled)
         nBurnColorDepth = 16;
     else
         nBurnColorDepth = 32;
@@ -558,6 +564,6 @@ void BurnUpdateVariables()
     ApplyDipVariables();
 
     // Override the NeoGeo bios DIP Switch by the option (for the moment)
-    if (bBurnNeogeoGame && bNeoSystemSetEnabled)
+    if (IS_NEOGEO_GAME && bNeoSystemSetEnabled)
         SetNeoSystem(nNeoBiosCateg);
 }

@@ -1,6 +1,6 @@
 This list contains all games supported by FB Alpha.
 
-1270 games supported in total; X = excluded from build; D = included in debug build only; NW = not working
+1299 games supported in total; X = excluded from build; D = included in debug build only; NW = not working
 
   name		  status  full name						  parent	  year	  company	  hardware	  remarks
 +---------------+-------+-------------------------------------------------------+---------------+-------+---------------+---------------+---------------------------------------+
@@ -285,6 +285,9 @@ This list contains all games supported by FB Alpha.
 | pgmfrog	|  	| Frog Feast (PGM)					| 		| 2006	| RasterSoft	| PolyGameMaster| 					|
 | funcube2	| D NW	| Funcube 2 (v1.1)					| 		| 2001	| Namco		| Newer Seta	| Unemulated Sub CPU			|
 | funcube4	| D NW	| Funcube 4 (v1.0)					| 		| 2001	| Namco		| Newer Seta	| Unemulated Sub CPU			|
+| gaiapols	|  	| Gaiapolis (ver EAF)					| 		| 1993	| Konami	| GX123		| 					|
+| gaiapolsj	|  	| Gaiapolis (ver JAF)					| gaiapols	| 1993	| Konami	| GX123		| 					|
+| gaiapolsu	|  	| Gaiapolis (ver UAF)					| gaiapols	| 1993	| Konami	| GX123		| 					|
 | neogalag	|  	| Galaga Demo (set 1)					| 		| 2013	| Cristiano Bei/| Neo Geo	| 					|
 | neogalaga	|  	| Galaga Demo (set 2)					| neogalag	| 2013	| Cristiano Bei/| Neo Geo	| 					|
 | galaxyfg	|  	| Galaxy Fight - Universal Warriors			| 		| 1995	| Sunsoft	| Neo Geo MVS	| 					|
@@ -392,13 +395,11 @@ This list contains all games supported by FB Alpha.
 | knightsh	|  	| Knights of the Round (hack set 1)			| knights	| 1991	| hack		| CPS1		| 					|
 | knightsh2	|  	| Knights of the Round (hack set 2, 911127 etc)		| knights	| 1991	| hack		| CPS1		| 					|
 | kovqxzbws	|  	| Knights of Valour - Qun Xiong Zheng Ba Wu Shuang Ban	| kovshp	| 2008	| IGS		| PolyGameMaster| 					|
-| kovqxzbws1	|  	| Knights of Valour - Qun Xiong Zheng Ba Wu Shuang Ban	| kovshp	| 2008	| IGS		| PolyGameMaster| 					|
 | kov111	|  	| Knights of Valour - Sangoku Senki (V111, Japan)	| kov		| 1999	| IGS (Alta Co.,| PolyGameMaster| 					|
 | kov114	|  	| Knights of Valour - Sangoku Senki (V114, Hong Kong)	| kov		| 1999	| IGS		| PolyGameMaster| 					|
 | kov115	|  	| Knights of Valour - Sangoku Senki (V115)		| kov		| 1999	| IGS		| PolyGameMaster| 					|
 | kov		|  	| Knights of Valour - Sangoku Senki (V117)		| 		| 1999	| IGS		| PolyGameMaster| 					|
 | kovtstd	|  	| Knights of Valour - Tun Shi Tian Di			| kovplus	| 1999	| IGS		| PolyGameMaster| 					|
-| kovztstd	|  	| Knights of Valour - 三国战纪真.吞食天地2022�| kovplus	| 1999	| IGS		| PolyGameMaster| 					|
 | kov2100	|  	| Knights of Valour 2 (V100, 100, 100, Hong Kong)	| kov2		| 2000	| IGS		| PolyGameMaster| 					|
 | kov2101	|  	| Knights of Valour 2 (V101, 101, 100, Hong Kong)	| kov2		| 2000	| IGS		| PolyGameMaster| 					|
 | kov2102	|  	| Knights of Valour 2 (V102, 101, 100, Hong Kong)	| kov2		| 2000	| IGS		| PolyGameMaster| 					|
@@ -452,6 +453,7 @@ This list contains all games supported by FB Alpha.
 | kof2k2omg9	|  	| Kof2002 (Omega v0.9)					| kof2002	| 2012	| bootleg	| KOF-ON Team	| 					|
 | myangel	|  	| Kosodate Quiz My Angel (Japan)			| 		| 1996	| Namco		| Newer Seta	| 					|
 | myangel2	|  	| Kosodate Quiz My Angel 2 (Japan)			| 		| 1996	| Namco		| Newer Seta	| 					|
+| dadandrn	|  	| Kyukyoku Sentai Dadandarn (ver JAA)			| mmaulers	| 1993	| Konami	| GX170		| 					|
 | lans2004	|  	| Lansquenet 2004 (Shock Troopers - 2nd Squad bootleg)	| shocktr2	| 1998	| bootleg	| Neo Geo MVS	| 					|
 | lasthope	|  	| Last Hope (bootleg AES to MVS conversion, no coin supp| 		| 2005	| NG:Dev.Team	| Neo Geo MVS	| 					|
 | lhcdb		|  	| Last Hope CD Beta (Neo CD conversion)			| 		| 2007	| NG:Dev.Team	| Neo Geo MVS	| Imperfect graphics			|
@@ -481,6 +483,12 @@ This list contains all games supported by FB Alpha.
 | mmatrixj	|  	| Mars Matrix (000412 Japan)				| mmatrix	| 2000	| Capcom / Takum| CPS2		| 					|
 | mmatrixd	|  	| Mars Matrix (000412 USA Phoenix Edition)		| mmatrix	| 2000	| bootleg	| CPS2		| 					|
 | mmatrix	|  	| Mars Matrix (000412 USA)				| 		| 2000	| Capcom / Takum| CPS2		| 					|
+| mtlchampa	|  	| Martial Champion (ver AAA)				| mtlchamp	| 1993	| Konami	| GX234		| 					|
+| mtlchamp1	|  	| Martial Champion (ver EAA)				| mtlchamp	| 1993	| Konami	| GX234		| 					|
+| mtlchamp	|  	| Martial Champion (ver EAB)				| 		| 1993	| Konami	| GX234		| 					|
+| mtlchampj	|  	| Martial Champion (ver JAA)				| mtlchamp	| 1993	| Konami	| GX234		| 					|
+| mtlchampu1	|  	| Martial Champion (ver UAD)				| mtlchamp	| 1993	| Konami	| GX234		| 					|
+| mtlchampu	|  	| Martial Champion (ver UAE)				| mtlchamp	| 1993	| Konami	| GX234		| 					|
 | martmastc102	|  	| Martial Masters (V102, 101, 101, China)		| martmast	| 2001	| IGS		| PolyGameMaster| 					|
 | martmasttw	|   NW	| Martial Masters (V102, 101, 101, Taiwan)		| martmast	| 2001	| IGS		| PolyGameMaster| 					|
 | martmastc103	|  	| Martial Masters (V103, 102, 101, China)		| martmast	| 2001	| IGS		| PolyGameMaster| 					|
@@ -551,6 +559,11 @@ This list contains all games supported by FB Alpha.
 | ms5plus	|  	| Metal Slug 5 Plus (bootleg)				| mslug5	| 2003	| bootleg	| Neo Geo MVS	| 					|
 | mslug3b6	|  	| Metal Slug 6 (Metal Slug 3 bootleg)			| mslug3	| 2000	| bootleg	| Neo Geo MVS	| 					|
 | mslugx	|  	| Metal Slug X - Super Vehicle-001 (NGM-2500)(NGH-2500)	| 		| 1999	| SNK		| Neo Geo MVS	| 					|
+| metamrpha	|  	| Metamorphic Force (ver AAA)				| metamrph	| 1993	| Konami	| GX224		| 					|
+| metamrphe	|  	| Metamorphic Force (ver EAA - alternate)		| metamrph	| 1993	| Konami	| GX224		| 					|
+| metamrph	|  	| Metamorphic Force (ver EAA)				| 		| 1993	| Konami	| GX224		| 					|
+| metamrphj	|  	| Metamorphic Force (ver JAA)				| metamrph	| 1993	| Konami	| GX224		| 					|
+| metamrphu	|  	| Metamorphic Force (ver UAA)				| metamrph	| 1993	| Konami	| GX224		| 					|
 | mpangr1	|  	| Mighty! Pang (000925 Euro)				| mpang		| 2000	| Mitchell	| CPS2		| 					|
 | mpang		|  	| Mighty! Pang (001010 Euro)				| 		| 2000	| Mitchell	| CPS2		| 					|
 | mpangu	|  	| Mighty! Pang (001010 USA)				| mpang		| 2000	| Mitchell	| CPS2		| 					|
@@ -559,6 +572,7 @@ This list contains all games supported by FB Alpha.
 | minasan	|  	| Minasanno Okagesamadesu! Daisugorokutaikai (MOM-001)(M| 		| 1990	| Monolith Corp.| Neo Geo MVS	| 					|
 | gundamex	|  	| Mobile Suit Gundam EX Revue				| 		| 1994	| Banpresto	| Newer Seta	| 					|
 | miexchng	|  	| Money Puzzle Exchanger / Money Idol Exchanger		| 		| 1997	| Face		| Neo Geo MVS	| 					|
+| mmaulers	|  	| Monster Maulers (ver EAA)				| 		| 1993	| Konami	| GX170		| 					|
 | mbomberj	|  	| Muscle Bomber - the body explosion (930713 Japan)	| slammast	| 1993	| Capcom	| CPS1		| 					|
 | mbombdje	| X	| Muscle Bomber Duo - heat up warriors (931206 Japan E)	| mbombrd	| 1993	| Capcom	| CPS1		| 					|
 | mbombrdj	|  	| Muscle Bomber Duo - heat up warriors (931206 Japan)	| mbombrd	| 1993	| Capcom	| CPS1		| 					|
@@ -569,6 +583,11 @@ This list contains all games supported by FB Alpha.
 | mutnat	|  	| Mutation Nation (NGM-014)(NGH-014)			| 		| 1992	| SNK		| Neo Geo MVS	| 					|
 | mysticrib	|  	| Mystic Riders (bootleg?)				| mysticri	| 1992	| Irem		| Irem M92	| 					|
 | mysticri	|  	| Mystic Riders (World)					| 		| 1992	| Irem		| Irem M92	| 					|
+| mystwarraa	|  	| Mystic Warriors (ver AAA)				| mystwarr	| 1993	| Konami	| GX128		| 					|
+| mystwarra	|  	| Mystic Warriors (ver AAB)				| mystwarr	| 1993	| Konami	| GX128		| 					|
+| mystwarr	|  	| Mystic Warriors (ver EAA)				| 		| 1993	| Konami	| GX128		| 					|
+| mystwarrj	|  	| Mystic Warriors (ver JAA)				| mystwarr	| 1993	| Konami	| GX128		| 					|
+| mystwarru	|  	| Mystic Warriors (ver UAA)				| mystwarr	| 1993	| Konami	| GX128		| 					|
 | nam1975	|  	| NAM-1975 (NGM-001)(NGH-001)				| 		| 1990	| SNK		| Neo Geo MVS	| 					|
 | nemor1	|  	| Nemo (90 11 09 etc)					| nemo		| 1990	| Capcom	| CPS1		| 					|
 | nemoj		|  	| Nemo (90 11 20 Japan)					| nemo		| 1990	| Capcom	| CPS1		| 					|
@@ -762,6 +781,9 @@ This list contains all games supported by FB Alpha.
 | sengoku3	|  	| Sengoku 3 / Sengoku Densho 2001 (set 1)		| 		| 2001	| SNK / Noise Fa| Neo Geo MVS	| 					|
 | sengoku3a	|  	| Sengoku 3 / Sengoku Densho 2001 (Set 2)		| sengoku3	| 2001	| SNK / Noise Fa| Neo Geo MVS	| 					|
 | mercsj	|  	| Senjo no Ookami II (Ookami 2 900302 Japan)		| mercs		| 1990	| Capcom	| CPS1		| 					|
+| shadfrcej	|  	| Shadow Force (Japan, Version 2)			| shadfrce	| 1993	| Technos Japan	| Miscellaneous	| 					|
+| shadfrceu	|  	| Shadow Force (US, Version 2)				| shadfrce	| 1993	| Technos Japan	| Miscellaneous	| 					|
+| shadfrce	|  	| Shadow Force (World, Version 3)			| 		| 1993	| Technos Japan	| Miscellaneous	| 					|
 | beast		|  	| Shadow of the Beast (Neo Geo demo)			| 		| ????	| Jeff Kurtz	| Neo Geo MVS	| 					|
 | shocktro	|  	| Shock Troopers (set 1)				| 		| 1997	| Saurus	| Neo Geo MVS	| 					|
 | shocktroa	|  	| Shock Troopers (set 2)				| shocktro	| 1997	| Saurus	| Neo Geo MVS	| 					|
@@ -1201,6 +1223,13 @@ This list contains all games supported by FB Alpha.
 | varthj	|  	| Varth - operation thunderstorm (920714 Japan)		| varth		| 1992	| Capcom	| CPS1		| 					|
 | varthb	|  	| Varth - operation thunderstorm (bootleg, 920612 etc)	| varth		| 1992	| bootleg	| CPS1		| 					|
 | viewpoin	|  	| Viewpoint						| 		| 1992	| Sammy / Aicom	| Neo Geo MVS	| 					|
+| viostormab	|  	| Violent Storm (ver AAB)				| viostorm	| 1993	| Konami	| GX168		| 					|
+| viostorma	|  	| Violent Storm (ver AAC)				| viostorm	| 1993	| Konami	| GX168		| 					|
+| viostormeb	|  	| Violent Storm (ver EAB)				| viostorm	| 1993	| Konami	| GX168		| 					|
+| viostorm	|  	| Violent Storm (ver EAC)				| 		| 1993	| Konami	| GX224		| 					|
+| viostormj	|  	| Violent Storm (ver JAC)				| viostorm	| 1993	| Konami	| GX168		| 					|
+| viostormub	|  	| Violent Storm (ver UAB)				| viostorm	| 1993	| Konami	| GX168		| 					|
+| viostormu	|  	| Violent Storm (ver UAC)				| viostorm	| 1993	| Konami	| GX168		| 					|
 | gowcaizr	|  	| Voltage Fighter - Gowcaizer / Choujin Gakuen Gowcaizer| 		| 1995	| Technos	| Neo Geo MVS	| 					|
 | mj4simai	|  	| Wakakusamonogatari Mahjong Yonshimai (Japan)		| 		| 1996	| Maboroshi Ware| Newer Seta	| 					|
 | wakuwak7	|  	| Waku Waku 7						| 		| 1996	| Sunsoft	| Neo Geo MVS	| 					|

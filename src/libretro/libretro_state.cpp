@@ -5,6 +5,7 @@
 static UINT8 *pStateBuffer;
 static UINT32 nStateLen;
 static UINT32 nStateTmpLen;
+static UINT32 nCurDrvActive = ~0U;
 
 static int StateWriteAcb(BurnArea *pba)
 {
@@ -70,6 +71,8 @@ size_t retro_serialize_size()
     if (nBurnDrvActive == ~0U)
         return 0;
 
+    nCurDrvActive = nBurnDrvActive;
+
     INT32 nAction = ACB_FULLSCAN | ACB_READ;
 
     TweakScanFlags();
@@ -84,7 +87,7 @@ size_t retro_serialize_size()
 bool retro_serialize(void *data, size_t size)
 {
     if (nBurnDrvActive == ~0U)
-        return true;
+        return false;
 
     INT32 nAction = ACB_FULLSCAN | ACB_READ;
 
@@ -105,17 +108,17 @@ bool retro_serialize(void *data, size_t size)
 bool retro_unserialize(const void *data, size_t size)
 {
     if (nBurnDrvActive == ~0U)
-        return true;
+        return false;
 
     INT32 nAction = ACB_FULLSCAN | ACB_WRITE;
 
     TweakScanFlags();
 
-    // second instance runahead never calls retro_serialize_size(),
-    // but to avoid overflows nStateLen is required in this core's savestate logic,
-    // so we use "size" to update nStateLen
-    if (size > nStateLen)
-        nStateLen = size;
+    if (nBurnDrvActive != nCurDrvActive)
+        nStateLen = retro_serialize_size();
+
+    if (size != nStateLen)
+        return false;
 
     BurnAcb = StateReadAcb;
     pStateBuffer = (UINT8 *)data;

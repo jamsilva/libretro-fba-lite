@@ -1,25 +1,30 @@
+##################### MAIN #####################
 FBA_BURN_DIR			:= $(MAIN_FBA_DIR)/burn
+FBA_BURN_DEVICES_DIR    := $(MAIN_FBA_DIR)/burn/devices
 FBA_BURN_DRIVERS_DIR	:= $(MAIN_FBA_DIR)/burn/drv
-FBA_BURNER_DIR			:= $(MAIN_FBA_DIR)/burner
+FBA_BURN_SND_DIR        := $(MAIN_FBA_DIR)/burn/snd
 FBA_CPU_DIR				:= $(MAIN_FBA_DIR)/cpu
 FBA_GENERATED_DIR		:= $(MAIN_FBA_DIR)/dep/generated
-FBA_INTERFACE_DIR		:= $(MAIN_FBA_DIR)/intf
 FBA_LIB_DIR				:= $(MAIN_FBA_DIR)/dep/libs
 FBA_SCRIPTS_DIR			:= $(MAIN_FBA_DIR)/dep/scripts
 LIBRETRO_DIR			:= $(MAIN_FBA_DIR)/libretro
 LIBRETRO_COMM_DIR		:= $(LIBRETRO_DIR)/libretro-common
 
-#ATARI_DIR				:= $(FBA_BURN_DRIVERS_DIR)/atari
-CAPCOM_DIR				:= $(FBA_BURN_DRIVERS_DIR)/capcom
-CPS3_DIR				:= $(FBA_BURN_DRIVERS_DIR)/cps3
-#GALAXIAN_DIR			:= $(FBA_BURN_DRIVERS_DIR)/galaxian
-NEOGEO_DIR				:= $(FBA_BURN_DRIVERS_DIR)/neogeo
-PGM_DIR					:= $(FBA_BURN_DRIVERS_DIR)/pgm
-M68K_DIR				:= $(FBA_CPU_DIR)/m68k
-#MIPS3_DIR				:= $(FBA_CPU_DIR)/mips3
-#MIPS3_X64_DYNAREC_DIR	:= $(FBA_CPU_DIR)/mips3/x64
-#TMS34010_DIR			:= $(FBA_CPU_DIR)/tms34010
-#ADSP2100_DIR			:= $(FBA_CPU_DIR)/adsp2100
+##################### DRV #####################
+DRV_CAPCOM_DIR				:= $(FBA_BURN_DRIVERS_DIR)/capcom
+DRV_CPS3_DIR				:= $(FBA_BURN_DRIVERS_DIR)/cps3
+DRV_NEOGEO_DIR				:= $(FBA_BURN_DRIVERS_DIR)/neogeo
+DRV_PGM_DIR					:= $(FBA_BURN_DRIVERS_DIR)/pgm
+DRV_IREM_DIR				:= $(FBA_BURN_DRIVERS_DIR)/irem
+DRV_PST90S_DIR              := $(FBA_BURN_DRIVERS_DIR)/pst90s
+DRV_KONAMI_DIR				:= $(FBA_BURN_DRIVERS_DIR)/konami
+
+##################### CPU #####################
+CPU_ARM7_DIR				:= $(FBA_CPU_DIR)/arm7
+CPU_M68K_DIR				:= $(FBA_CPU_DIR)/m68k
+CPU_NEC_DIR	                := $(FBA_CPU_DIR)/nec
+CPU_SH2_DIR                 := $(FBA_CPU_DIR)/sh2
+CPU_Z80_DIR                 := $(FBA_CPU_DIR)/z80
 
 BURN_BLACKLIST := \
 	$(FBA_CPU_DIR)/arm7/arm7exec.c \
@@ -96,36 +101,29 @@ else
 	FBA_DEFINES += -DAUTOGEN_DATS
 endif
 
-ifeq ($(NO_CAPCOM), 1)
-	CAPCOM_DIR :=
-endif
-
-ifeq ($(NO_NEOGEO), 1)
-	NEOGEO_DIR :=
-endif
-
 FBA_BURN_DRIVERS_DIRS := \
-	$(CAPCOM_DIR) \
-	$(CPS3_DIR) \
-	$(FBA_BURN_DRIVERS_DIR)/irem \
-	$(NEOGEO_DIR) \
-	$(PGM_DIR) \
-	$(FBA_BURN_DRIVERS_DIR)/pst90s \
-	$(FBA_BURN_DRIVERS_DIR)
+	$(FBA_BURN_DRIVERS_DIR) \
+	$(DRV_CAPCOM_DIR) \
+	$(DRV_CPS3_DIR) \
+	$(DRV_NEOGEO_DIR) \
+	$(DRV_PGM_DIR) \
+	$(DRV_IREM_DIR) \
+	$(DRV_PST90S_DIR) \
+	$(DRV_KONAMI_DIR)
 
 FBA_BURN_DIRS := \
 	$(FBA_BURN_DIR) \
-	$(FBA_BURN_DIR)/devices \
-	$(FBA_BURN_DIR)/snd \
-	$(FBA_BURN_DRIVERS_DIRS)
+	$(FBA_BURN_DEVICES_DIR) \
+	$(FBA_BURN_DRIVERS_DIRS) \
+	$(FBA_BURN_SND_DIR)
 
 FBA_CPU_DIRS := \
 	$(FBA_CPU_DIR) \
-	$(FBA_CPU_DIR)/arm7 \
-	$(M68K_DIR) \
-	$(FBA_CPU_DIR)/nec \
-	$(FBA_CPU_DIR)/sh2 \
-	$(FBA_CPU_DIR)/z80
+	$(CPU_ARM7_DIR) \
+	$(CPU_M68K_DIR) \
+	$(CPU_NEC_DIR) \
+	$(CPU_SH2_DIR) \
+	$(CPU_Z80_DIR)
 
 FBA_SRC_DIRS := $(FBA_BURN_DIRS) $(FBA_CPU_DIRS)
 
@@ -160,23 +158,20 @@ ifneq ($(STATIC_LINKING), 1)
 endif
 
 INCLUDE_DIRS := \
-	$(FBA_BURNER_DIR)/win32 \
 	$(LIBRETRO_COMM_DIR)/include \
 	$(LIBRETRO_DIR) \
+	$(FBA_BURN_DEVICES_DIR) \
+	$(FBA_BURN_DRIVERS_DIR) \
+	$(FBA_BURN_SND_DIR) \
 	$(FBA_BURN_DIR) \
-	$(MAIN_FBA_DIR)/cpu \
-	$(FBA_BURN_DIR)/snd \
-	$(FBA_BURN_DIR)/devices \
-	$(FBA_CPU_DIR) \
-	$(FBA_CPU_DIR)/z80 \
+	$(FBA_CPU_DIR)
+
+INCLUDE_DIRS += \
 	$(FBA_LIB_DIR)/zlib \
 	$(FBA_LIB_DIR)/lib7z \
 	$(FBA_LIB_DIR)/mxml \
-	$(FBA_BURN_DIR)/drv/capcom \
-	$(FBA_BURN_DIR)/drv/neogeo \
-	$(FBA_BURN_DIR)/drv/irem \
-	$(FBA_GENERATED_DIR) \
-	$(FBA_LIB_DIR)
+	$(FBA_LIB_DIR) \
+	$(FBA_GENERATED_DIR)
 
 ARM_FLAGS =
 

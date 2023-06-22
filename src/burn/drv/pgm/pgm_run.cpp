@@ -77,6 +77,9 @@ UINT32 nPgmAsicRegionHackAddress = 0;
 static INT32 nCyclesDone[3];
 static INT32 nExtraCycles;
 
+static void DrvUpdateSound();
+static void DrvUpdateDraw();
+
 static INT32 pgmMemIndex()
 {
 	UINT8 *Next;
@@ -932,7 +935,29 @@ INT32 pgmExit()
 	return 0;
 }
 
-INT32 pgmFrameBase()
+static void DrvUpdateSound()
+{
+	BurnSetPlaySoundOut(pBurnSoundBuffers[nBurnSoundBuffersPos]);
+	nBurnSoundBuffersPos = (nBurnSoundBuffersPos + 1) % BURN_MAX_AUD_BUFFER;
+	pBurnSoundOut = pBurnSoundBuffers[nBurnSoundBuffersPos];
+}
+
+static void DrvUpdateDraw()
+{
+	BurnLockLock(pBurnDrvDrawThread->Lock);
+
+	BurnSetPlayDrawOut(pBurnDrawBuffers[nBurnDrawBuffersPos]);
+	nBurnDrawBuffersPos = (nBurnDrawBuffersPos + 1) % BURN_MAX_VID_BUFFER;
+	pBurnDraw = pBurnDrawBuffers[nBurnDrawBuffersPos];
+
+	memcpy(PGMSprBuf, PGM68KRAM, 0xa00); // Sprite RAM 0-bff
+
+	pBurnDrvDrawThread->bWait = false;
+	BurnCondSignal(pBurnDrvDrawThread->Cond);
+	BurnLockUnlock(pBurnDrvDrawThread->Lock);
+}
+
+INT32 pgmFrame()
 {
 	if (PgmReset)
 	{
@@ -1067,34 +1092,10 @@ INT32 pgmFrameBase()
 	ZetClose();
 	SekClose();
 
-	return 0;
-}
-
-INT32 pgmFrame()
-{
-	pgmFrameBase();
-
 	if (bBurnSound)
-	{
-		BurnSetPlaySoundOut(pBurnSoundBuffers[nBurnSoundBuffersPos]);
-		nBurnSoundBuffersPos = (nBurnSoundBuffersPos + 1) % BURN_MAX_AUD_BUFFER;
-		pBurnSoundOut = pBurnSoundBuffers[nBurnSoundBuffersPos];
-	}
-	
+		DrvUpdateSound();
 	if (bBurnDraw)
-	{
-		BurnLockLock(pBurnDrvDrawThread->Lock);
-
-		BurnSetPlayDrawOut(pBurnDrawBuffers[nBurnDrawBuffersPos]);
-		nBurnDrawBuffersPos = (nBurnDrawBuffersPos + 1) % BURN_MAX_VID_BUFFER;
-		pBurnDraw = pBurnDrawBuffers[nBurnDrawBuffersPos];
-
-		memcpy(PGMSprBuf, PGM68KRAM, 0xa00); // Sprite RAM 0-bff
-
-		pBurnDrvDrawThread->bWait = false;
-		BurnCondSignal(pBurnDrvDrawThread->Cond);
-		BurnLockUnlock(pBurnDrvDrawThread->Lock);
-	}
+		DrvUpdateDraw();
 
 	return 0;
 }

@@ -2748,7 +2748,7 @@ static void FM_ADPCMAWrite(YM2610 *F2610,int r,int v)
 					adpcm[c].adpcm_out = 0;
 					adpcm[c].flag      = 1;
 
-					if(F2610->pcmbuf==NULL){					/* Check ROM Mapped */
+					if(F2610->pcmbuf==NULL){					/* CHECK ROM Mapped */
 						logerror("YM2608-YM2610: ADPCM-A rom not mapped\n");
 						adpcm[c].flag = 0;
 					} else{

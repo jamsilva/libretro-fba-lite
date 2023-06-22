@@ -234,13 +234,23 @@ UINT32 BurnDrvGetIndexByName(const char *szName)
 	return nDrv;
 }
 
+// 16-bit XRGB1555
+static UINT32 __cdecl HighCol15(INT32 r, INT32 g, INT32 b, INT32 /* i */)
+{
+	UINT32 t;
+	t = (r << 7) & 0x7C00;	// 0xxxxxxx x00000000 => 0xxxxx00 00000000
+	t |= (g << 2) & 0x03E0; // 000000xx xxxxxx00 => 000000xx xxx00000
+	t |= (b >> 3) & 0x001F; // 00000000 000xxxxx => 00000000 000xxxxx
+	return t;
+}
+
 // 16-bit RGB565
 static UINT32 __cdecl HighCol16(INT32 r, INT32 g, INT32 b, INT32 /* i */)
 {
 	UINT32 t;
-	t = (r << 8) & 0xf800;
-	t |= (g << 3) & 0x07e0;
-	t |= (b >> 3) & 0x001f;
+	t = (r << 8) & 0xF800;
+	t |= (g << 3) & 0x07E0;
+	t |= (b >> 3) & 0x001F;
 	return t;
 }
 
@@ -248,9 +258,9 @@ static UINT32 __cdecl HighCol16(INT32 r, INT32 g, INT32 b, INT32 /* i */)
 static UINT32 __cdecl HighCol32(INT32 r, INT32 g, INT32 b, INT32 /* i */)
 {
 	UINT32 t;
-	t = (r << 16) & 0xff0000;
-	t |= (g << 8) & 0x00ff00;
-	t |= (b)&0x0000ff;
+	t = (r << 16) & 0xFF0000;
+	t |= (g << 8) & 0x00FF00;
+	t |= b & 0x0000FF;
 
 	return t;
 }
@@ -261,7 +271,13 @@ INT32 SetBurnHighCol(INT32 nDepth)
 
 	BurnRecalcPal();
 
-	if (nDepth == 16)
+	if (nDepth == 15)
+	{
+		fmt = RETRO_PIXEL_FORMAT_0RGB1555;
+		BurnHighCol = HighCol15;
+		nBurnBpp = 2;
+	}
+	else if (nDepth == 16)
 	{
 		fmt = RETRO_PIXEL_FORMAT_RGB565;
 		BurnHighCol = HighCol16;

@@ -115,6 +115,9 @@ typedef struct
 
 static flash_chip main_flash;
 
+static void DrvUpdateSound();
+static void DrvUpdateDraw();
+
 void cps3_flash_init(flash_chip * chip/*, void *data*/)
 {
 	memset(chip, 0, sizeof(flash_chip));
@@ -1992,9 +1995,31 @@ INT32 DrvCps3Draw()
 	return 0;
 }
 
+static void DrvUpdateSound()
+{
+	BurnSetPlaySoundOut(pBurnSoundBuffers[nBurnSoundBuffersPos]);
+	nBurnSoundBuffersPos = (nBurnSoundBuffersPos + 1) % BURN_MAX_AUD_BUFFER;
+	pBurnSoundOut = pBurnSoundBuffers[nBurnSoundBuffersPos];
+}
+
+static void DrvUpdateDraw()
+{
+	BurnLockLock(pBurnDrvDrawThread->Lock);
+
+	BurnSetPlayDrawOut(pBurnDrawBuffers[nBurnDrawBuffersPos]);
+	nBurnDrawBuffersPos = (nBurnDrawBuffersPos + 1) % BURN_MAX_VID_BUFFER;
+	pBurnDraw = pBurnDrawBuffers[nBurnDrawBuffersPos];
+
+	memcpy(RamSprBak, RamSpr, 0x0020000 * sizeof(UINT32));
+
+	pBurnDrvDrawThread->bWait = false;
+	BurnCondSignal(pBurnDrvDrawThread->Cond);
+	BurnLockUnlock(pBurnDrvDrawThread->Lock);
+}
+
 static INT32 cps_int10_cnt = 0;
 
-INT32 cps3FrameBase()
+INT32 cps3Frame()
 {
 	if (cps3_reset)
 		Cps3Reset();
@@ -2054,36 +2079,10 @@ INT32 cps3FrameBase()
 	
 	//bprintf(0, _T("PC: %08x\n"), Sh2GetPC(0));
 	
-	//if (bBurnDraw) DrvCps3Draw();
-
-	return 0;
-}
-
-INT32 cps3Frame()
-{
-	cps3FrameBase();
-
 	if (bBurnSound)
-	{
-		BurnSetPlaySoundOut(pBurnSoundBuffers[nBurnSoundBuffersPos]);
-		nBurnSoundBuffersPos = (nBurnSoundBuffersPos + 1) % BURN_MAX_AUD_BUFFER;
-		pBurnSoundOut = pBurnSoundBuffers[nBurnSoundBuffersPos];
-	}
-	
+		DrvUpdateSound();
 	if (bBurnDraw)
-	{
-		BurnLockLock(pBurnDrvDrawThread->Lock);
-
-		BurnSetPlayDrawOut(pBurnDrawBuffers[nBurnDrawBuffersPos]);
-		nBurnDrawBuffersPos = (nBurnDrawBuffersPos + 1) % BURN_MAX_VID_BUFFER;
-		pBurnDraw = pBurnDrawBuffers[nBurnDrawBuffersPos];
-
-		memcpy(RamSprBak, RamSpr, 0x0020000 * sizeof(UINT32));
-
-		pBurnDrvDrawThread->bWait = false;
-		BurnCondSignal(pBurnDrvDrawThread->Cond);
-		BurnLockUnlock(pBurnDrvDrawThread->Lock);
-	}
+		DrvUpdateDraw();
 
 	return 0;
 }

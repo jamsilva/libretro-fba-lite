@@ -1274,6 +1274,9 @@ static struct BurnDIPInfo PsoldierDIPList[] =
 
 STDDIPINFO(Psoldier)
 
+static void DrvUpdateSound();
+static void DrvUpdateDraw();
+
 inline static UINT32 CalcCol(INT32 offs)
 {
 	INT32 nColour = DrvPalRAM[offs + 0] | (DrvPalRAM[offs + 1] << 8);
@@ -2198,11 +2201,11 @@ static void DrawLayers(INT32 start, INT32 finish)
 {
 	memset(RamPrioBitmap + (start * nScreenWidth), 0, nScreenWidth * (finish - start)); // clear priority
 
-	int bTransDrawReseted = 0;
+	bool bTransDrawReseted = false;
 	if (~nBurnLayer & 1)
 	{
 		memset(pTransDraw + (start * nScreenWidth), 0, nScreenWidth * (finish - start) * sizeof(INT16));
-		bTransDrawReseted = 1;
+		bTransDrawReseted = true;
 	}
 
 	if (~pf_control[3][4] & 0x10)
@@ -2298,6 +2301,28 @@ static void compile_inputs()
 	DrvClearOpposites(&DrvInput[1]);
 }
 
+static void DrvUpdateSound()
+{
+	BurnSetPlaySoundOut(pBurnSoundBuffers[nBurnSoundBuffersPos]);
+	nBurnSoundBuffersPos = (nBurnSoundBuffersPos + 1) % BURN_MAX_AUD_BUFFER;
+	pBurnSoundOut = pBurnSoundBuffers[nBurnSoundBuffersPos];
+}
+
+static void DrvUpdateDraw()
+{
+	BurnLockLock(pBurnDrvDrawThread->Lock);
+
+	BurnSetPlayDrawOut(pBurnDrawBuffers[nBurnDrawBuffersPos]);
+	nBurnDrawBuffersPos = (nBurnDrawBuffersPos + 1) % BURN_MAX_VID_BUFFER;
+	pBurnDraw = pBurnDrawBuffers[nBurnDrawBuffersPos];
+
+	memcpy(DrvSprBuf, DrvSprRAM, 0x800);
+
+	pBurnDrvDrawThread->bWait = false;
+	BurnCondSignal(pBurnDrvDrawThread->Cond);
+	BurnLockUnlock(pBurnDrvDrawThread->Lock);
+}
+
 static void scanline_interrupts(INT32 prev, INT32 segment, INT32 scanline)
 {
 	if (m92_sprite_buffer_timer)
@@ -2317,12 +2342,28 @@ static void scanline_interrupts(INT32 prev, INT32 segment, INT32 scanline)
 
 	if (scanline == m92_raster_irq_position)
 	{
+		if (scanline >= 8 && scanline < 248 && nPrevScreenPos != (scanline - 8) + 1)
+		{
+			// if (nPrevScreenPos >= 0 && nPrevScreenPos <= 239)
+			//	DrawLayers(nPrevScreenPos, (scanline - 8) + 1);
+			nPrevScreenPos = (scanline - 8) + 1;
+		}
+
 		VezSetIRQLineAndVector(0, (m92_irq_vectorbase + 8) / 4, CPU_IRQSTATUS_ACK);
 		nCyclesDone[0] += VezRun((m92_kludge & 4) ? 20 : 10); // nbbatman: gets rid of flashes in intro sequence
 		VezSetIRQLineAndVector(0, (m92_irq_vectorbase + 8) / 4, CPU_IRQSTATUS_NONE);
 	}
 	else if (scanline == 248) // vblank
 	{
+		// if (nPrevScreenPos != 240)
+		//  DrawLayers(nPrevScreenPos, 240);
+		nPrevScreenPos = 0;
+
+		// if (bBurnDraw)
+		//	DrvUpdateDraw();
+		// if (bBurnDraw)
+		//	DrvDraw();
+
 		if (m92_kludge & 4)
 			nCyclesDone[0] += VezRun(1200); // nbbatman: gets rid of flash after IREM logo fades out
 		VezSetIRQLineAndVector(0, (m92_irq_vectorbase + 0) / 4, CPU_IRQSTATUS_ACK);
@@ -2331,7 +2372,7 @@ static void scanline_interrupts(INT32 prev, INT32 segment, INT32 scanline)
 	}
 }
 
-static INT32 DrvFrameBase()
+static INT32 DrvFrame()
 {
 	if (DrvReset)
 	{
@@ -2382,7 +2423,6 @@ static INT32 DrvFrameBase()
 
 				nSoundBufferPos += nSegmentLength;
 			}
-
 			VezClose();
 		}
 	}
@@ -2400,34 +2440,10 @@ static INT32 DrvFrameBase()
 		}
 	}
 
-	return 0;
-}
-
-INT32 DrvFrame()
-{
-	DrvFrameBase();
-
 	if (bBurnSound)
-	{
-		BurnSetPlaySoundOut(pBurnSoundBuffers[nBurnSoundBuffersPos]);
-		nBurnSoundBuffersPos = (nBurnSoundBuffersPos + 1) % BURN_MAX_AUD_BUFFER;
-		pBurnSoundOut = pBurnSoundBuffers[nBurnSoundBuffersPos];
-	}
-	
+		DrvUpdateSound();
 	if (bBurnDraw)
-	{
-		BurnLockLock(pBurnDrvDrawThread->Lock);
-
-		BurnSetPlayDrawOut(pBurnDrawBuffers[nBurnDrawBuffersPos]);
-		nBurnDrawBuffersPos = (nBurnDrawBuffersPos + 1) % BURN_MAX_VID_BUFFER;
-		pBurnDraw = pBurnDrawBuffers[nBurnDrawBuffersPos];
-
-		memcpy(DrvSprBuf, DrvSprRAM, 0x800);
-
-		pBurnDrvDrawThread->bWait = false;
-		BurnCondSignal(pBurnDrvDrawThread->Cond);
-		BurnLockUnlock(pBurnDrvDrawThread->Lock);
-	}
+		DrvUpdateDraw();
 
 	return 0;
 }

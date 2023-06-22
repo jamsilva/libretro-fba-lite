@@ -53,6 +53,11 @@
 
 #include "cd_interface.h"
 
+#define IS_NEOGEO_GAME ((BurnDrvGetHardwareCode() & HARDWARE_PUBLIC_MASK) == HARDWARE_SNK_NEOGEO)
+#define IS_PGM_GAME ((BurnDrvGetHardwareCode() & HARDWARE_PUBLIC_MASK) == HARDWARE_IGS_PGM)
+#define IS_KONAMI_GAME ((BurnDrvGetHardwareCode() & HARDWARE_PUBLIC_MASK) == HARDWARE_PREFIX_KONAMI)
+#define IS_TECHNOS_GAME ((BurnDrvGetHardwareCode() & HARDWARE_PUBLIC_MASK) == HARDWARE_TECHNOS)
+
 // libretro.cpp
 #define RETRO_GAME_TYPE_DEF 0
 #define RETRO_GAME_TYPE_NEOCD 1
@@ -71,9 +76,6 @@ extern INT32 nBurnGameWidth;
 extern INT32 nBurnGameHeight;
 extern INT32 nBurnColorDepth;
 extern UINT32 nBurnRotation;
-
-extern bool bBurnNeogeoGame;
-extern bool bBurnPgmGame;
 
 extern UINT32 nFrameskipNum;
 extern INT32 nAudSampleRate;
